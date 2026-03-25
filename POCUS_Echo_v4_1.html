@@ -1,0 +1,1507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0b1a2e">
+<title>POCUS: Emergency and Critical Care</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b1a2e;--bg2:#121f38;--bg3:#182840;--bg4:#1f3150;
+  --acc:#3b82f6;--acc2:#60a5fa;--acc-d:rgba(59,130,246,.13);
+  --gn:#22c55e;--gn-d:rgba(34,197,94,.13);--gn-b:rgba(34,197,94,.25);
+  --am:#f59e0b;--am-d:rgba(245,158,11,.13);--am-b:rgba(245,158,11,.25);
+  --or:#f97316;--or-d:rgba(249,115,22,.13);--or-b:rgba(249,115,22,.25);
+  --rd:#ef4444;--rd-d:rgba(239,68,68,.13);--rd-b:rgba(239,68,68,.25);
+  --tx:#e2e8f0;--tx2:#94a3b8;--tx3:#64748b;
+  --br:rgba(255,255,255,.07);--br2:rgba(255,255,255,.13);
+  --r:10px;--f:'DM Sans',system-ui,sans-serif;--m:'DM Mono','Fira Code',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg);color:var(--tx);font-family:var(--f);font-size:14px;min-height:100vh;overflow-x:hidden}
+/* BANNER */
+.banner{display:flex;background:var(--bg3);border-bottom:1px solid var(--br2);overflow-x:auto;scrollbar-width:none}
+.banner::-webkit-scrollbar{display:none}
+.bi{flex:none;padding:6px 14px;border-right:1px solid var(--br);display:flex;flex-direction:column;align-items:center;min-width:78px}
+.bl{font-size:9px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+.bv{font-size:13px;font-weight:600;font-family:var(--m);color:var(--tx2)}
+.bv.ok{color:var(--gn)}.bv.warn{color:var(--am)}.bv.bad{color:var(--rd)}
+/* HEADER */
+.hdr{position:sticky;top:0;z-index:100;background:rgba(11,26,46,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--br)}
+.htop{display:flex;align-items:center;justify-content:space-between;padding:10px 14px 6px}
+.logo{display:flex;align-items:center;gap:8px}
+.lico{width:30px;height:30px;background:var(--acc);border-radius:7px;display:flex;align-items:center;justify-content:center}
+.lico svg{width:17px;height:17px;fill:#fff}
+.ltitle{font-size:14px;font-weight:600;letter-spacing:-.3px}
+.lsub{font-size:10px;color:var(--tx3);letter-spacing:.3px}
+.hbtns{display:flex;gap:5px}
+.hb{background:var(--bg3);border:1px solid var(--br2);color:var(--tx2);border-radius:7px;padding:5px 9px;font-size:11px;font-weight:500;cursor:pointer;font-family:var(--f);transition:all .15s;white-space:nowrap}
+.hb.pri{background:var(--acc);border-color:var(--acc);color:#fff}
+.hb:active{transform:scale(.96)}
+.ptstrip{display:flex;align-items:center;gap:6px;padding:4px 14px 8px;font-size:11px;flex-wrap:wrap}
+.ptb{background:var(--bg3);border:1px solid var(--br2);border-radius:5px;padding:2px 7px;color:var(--tx2)}
+.ptb.on{border-color:var(--acc);color:var(--acc2)}
+.tnav{display:flex;overflow-x:auto;gap:1px;padding:0 14px;border-top:1px solid var(--br);scrollbar-width:none}
+.tnav::-webkit-scrollbar{display:none}
+.tb2{flex:none;padding:8px 12px;background:none;border:none;border-bottom:2px solid transparent;color:var(--tx3);font-size:11px;font-weight:500;cursor:pointer;white-space:nowrap;transition:all .15s;font-family:var(--f);letter-spacing:.2px}
+.tb2.on{color:var(--acc2);border-bottom-color:var(--acc)}
+.tdot{display:inline-block;width:4px;height:4px;border-radius:50%;background:var(--gn);margin-left:4px;vertical-align:middle;opacity:0}
+.tb2.done .tdot{opacity:1}
+/* MAIN */
+.main{padding:12px 14px 120px;max-width:700px;margin:0 auto}
+.ts{display:none}.ts.on{display:block}
+/* CARDS */
+.sc{background:var(--bg2);border:1px solid var(--br);border-radius:var(--r);margin-bottom:10px;overflow:hidden}
+.sch{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid var(--br);cursor:pointer;user-select:none}
+.sct{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600}
+.sci{width:22px;height:22px;border-radius:5px;background:var(--acc-d);display:flex;align-items:center;justify-content:center;font-size:12px}
+.sca{color:var(--tx3);font-size:10px;transition:transform .2s}
+.sc.col .sca{transform:rotate(-90deg)}.sc.col .scb{display:none}
+.scb{padding:12px}
+.sctag{font-size:9px;font-weight:600;padding:2px 5px;border-radius:3px;background:var(--acc-d);color:var(--acc2);letter-spacing:.4px}
+/* FIELD GRIDS */
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.fr3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px}
+.fr1{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:8px}
+.fg{display:flex;flex-direction:column;gap:3px}
+.fl{font-size:10px;color:var(--tx2);font-weight:500;display:flex;align-items:center;justify-content:space-between}
+.fu{color:var(--tx3);font-size:9px}
+.fi{background:var(--bg3);border:1px solid var(--br2);color:var(--tx);border-radius:7px;padding:8px 10px;font-size:15px;font-weight:500;width:100%;font-family:var(--m);transition:border-color .15s;-webkit-appearance:none;appearance:none}
+.fi:focus{outline:none;border-color:var(--acc)}
+.fi.gn{border-color:var(--gn)!important;background:var(--gn-d)}
+.fi.am{border-color:var(--am)!important;background:var(--am-d)}
+.fi.or{border-color:var(--or)!important;background:var(--or-d)}
+.fi.rd{border-color:var(--rd)!important;background:var(--rd-d)}
+.fc{background:rgba(59,130,246,.08);border:1px dashed rgba(59,130,246,.3);color:var(--acc2);border-radius:7px;padding:8px 10px;font-size:15px;font-weight:600;font-family:var(--m);min-height:38px;display:flex;align-items:center}
+/* REF STRIP — input tabs */
+.rs{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:3px}
+.rs.c2{grid-template-columns:1fr 1fr}.rs.c1{grid-template-columns:1fr}
+.rc{padding:2px 3px;border-radius:3px;text-align:center;font-size:9px;font-weight:500;line-height:1.3}
+.rc.rn{background:var(--gn-d);color:var(--gn);border:1px solid var(--gn-b)}
+.rc.rm{background:var(--am-d);color:var(--am);border:1px solid var(--am-b)}
+.rc.ro{background:var(--or-d);color:var(--or);border:1px solid var(--or-b)}
+.rc.rs2{background:var(--rd-d);color:var(--rd);border:1px solid var(--rd-b)}
+/* REPORT GRADE STRIP */
+.gs{display:flex;border-radius:4px;overflow:hidden;gap:1px}
+.gs-cell{flex:1;padding:3px 4px;font-size:9px;font-weight:600;text-align:center;line-height:1.3;transition:opacity .15s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gs-cell.dim{opacity:.28}
+.gs-n{background:var(--gn-d);color:var(--gn);border:1px solid var(--gn-b)}
+.gs-m{background:var(--am-d);color:var(--am);border:1px solid var(--am-b)}
+.gs-o{background:var(--or-d);color:var(--or);border:1px solid var(--or-b)}
+.gs-s{background:var(--rd-d);color:var(--rd);border:1px solid var(--rd-b)}
+/* value cell coloured bg */
+.vn{background:var(--gn-d);color:var(--gn);font-weight:700}
+.vm{background:var(--am-d);color:var(--am);font-weight:700}
+.vo{background:var(--or-d);color:var(--or);font-weight:700}
+.vs{background:var(--rd-d);color:var(--rd);font-weight:700}
+.vok{color:var(--tx);font-weight:500}
+/* TOGGLES */
+.tg{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
+.tl{font-size:10px;color:var(--tx2);font-weight:500;margin-bottom:4px}
+.tb{padding:6px 11px;border-radius:7px;background:var(--bg3);border:1px solid var(--br2);color:var(--tx2);font-size:11px;font-weight:500;cursor:pointer;transition:all .15s;font-family:var(--f)}
+.tb.on{background:var(--acc-d);border-color:var(--acc);color:var(--acc2)}
+.tb.on.gn{background:var(--gn-d);border-color:var(--gn);color:var(--gn)}
+/* SEVERITY */
+.srow{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;margin-bottom:8px}
+.sb{padding:6px 3px;border-radius:5px;background:var(--bg3);border:1px solid var(--br2);color:var(--tx3);font-size:10px;font-weight:500;cursor:pointer;text-align:center;font-family:var(--f);transition:all .15s}
+.sb.a0{background:rgba(100,116,139,.15);border-color:#64748b;color:#94a3b8}
+.sb.a1{background:rgba(34,197,94,.1);border-color:var(--gn);color:var(--gn)}
+.sb.a2{background:var(--am-d);border-color:var(--am);color:var(--am)}
+.sb.a3{background:var(--or-d);border-color:var(--or);color:var(--or)}
+.sb.a4{background:var(--rd-d);border-color:var(--rd);color:var(--rd)}
+/* COMPUTED */
+.cr{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;background:var(--bg3);border-radius:7px;margin-bottom:6px}
+.crl{font-size:11px;color:var(--tx2)}
+.crv{font-size:13px;font-weight:600;font-family:var(--m);color:var(--acc2)}
+.cr.hi{border:1px solid rgba(59,130,246,.3);background:var(--acc-d)}
+.cr.hi .crl{color:var(--acc2);font-weight:600}.cr.hi .crv{font-size:16px}
+.divider{border:none;border-top:1px solid var(--br);margin:10px 0}
+.ibox{background:var(--acc-d);border:1px solid rgba(59,130,246,.2);border-radius:7px;padding:8px 10px;font-size:11px;color:var(--acc2);margin-bottom:10px}
+/* SHOCK */
+.shockbox{background:var(--bg3);border:1px solid var(--br2);border-radius:var(--r);padding:12px;margin-bottom:10px}
+.shpat{font-size:13px;font-weight:600;margin-bottom:6px}
+.shev{font-size:11px;color:var(--tx2);line-height:1.7}
+/* PT */
+.ptlist{display:flex;flex-direction:column;gap:5px;max-height:200px;overflow-y:auto}
+.pti{display:flex;align-items:center;justify-content:space-between;padding:9px 11px;background:var(--bg3);border-radius:7px;border:1px solid var(--br);cursor:pointer;transition:border-color .15s}
+.pti:hover{border-color:var(--acc)}
+.ptn{font-size:12px;font-weight:500}.ptm{font-size:10px;color:var(--tx3)}
+.ptsrow{display:flex;gap:6px;margin-bottom:10px}
+.ptsi{flex:1;background:var(--bg3);border:1px solid var(--br2);color:var(--tx);border-radius:7px;padding:8px 12px;font-size:13px;font-family:var(--f)}
+.ptsi:focus{outline:none;border-color:var(--acc)}
+.drvst{display:flex;align-items:center;gap:6px;padding:6px 10px;background:var(--bg3);border-radius:7px;margin-bottom:10px;font-size:11px;flex-wrap:wrap}
+.drvdot{width:6px;height:6px;border-radius:50%}
+.drvdot.ok{background:var(--gn)}.drvdot.off{background:var(--tx3)}
+/* REPORT */
+.rptact{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.rptb{flex:1;min-width:80px;padding:10px 6px;border-radius:var(--r);border:1px solid var(--br2);background:var(--bg3);color:var(--tx);font-size:12px;font-weight:500;cursor:pointer;font-family:var(--f);text-align:center;transition:all .15s}
+.rptb.pri{background:var(--acc);border-color:var(--acc);color:#fff}
+.rptb.drv{background:rgba(52,168,83,.15);border-color:#34a853;color:#34a853}
+.rptb:active{transform:scale(.97)}
+/* REPORT TABLE */
+.rtab{width:100%;border-collapse:collapse;font-size:11px;margin-bottom:14px}
+.rtab th{text-align:left;padding:6px 8px;background:var(--bg4);color:var(--tx2);font-weight:600;font-size:10px;letter-spacing:.4px;text-transform:uppercase;border-bottom:1px solid var(--br2)}
+.rtab td{padding:5px 8px;border-bottom:1px solid var(--br);vertical-align:middle}
+.rtab tr:last-child td{border-bottom:none}
+.rdom{font-size:11px;font-weight:700;padding:7px 8px 4px;background:var(--bg4);color:var(--acc2);letter-spacing:.5px;text-transform:uppercase;border-bottom:1px solid var(--br2)}
+.rval{font-family:var(--m);font-weight:600;font-size:12px;color:var(--tx);border-radius:4px;padding:3px 6px;white-space:nowrap}
+/* NARRATIVE */
+.narr{background:var(--bg2);border:1px solid var(--br2);border-radius:var(--r);padding:14px;margin-bottom:12px}
+.narrtitle{font-size:10px;font-weight:700;color:var(--acc2);letter-spacing:.5px;text-transform:uppercase;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--br)}
+.ni{padding:6px 0;border-bottom:1px solid var(--br);font-size:12px;line-height:1.6;color:var(--tx)}
+.ni:last-child{border-bottom:none}
+.ni .nv{color:var(--acc2);font-weight:600;font-family:var(--m)}
+.ni .nb{color:var(--rd);font-weight:600}
+.ni .ng{color:var(--gn);font-weight:600}
+.ni .nam{color:var(--am);font-weight:600}
+/* DELTA */
+.dbox{background:var(--bg2);border:1px solid var(--br);border-radius:var(--r);padding:12px;margin-bottom:10px}
+.dtitle{font-size:10px;font-weight:700;color:var(--tx2);letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px}
+.drow{display:flex;align-items:center;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--br);font-size:11px}
+.drow:last-child{border-bottom:none}
+.dparam{color:var(--tx2)}
+.dvals{display:flex;gap:8px;align-items:center;font-family:var(--m);font-size:11px}
+.dprev{color:var(--tx3)}.dcurr{color:var(--tx);font-weight:600}
+.dchg{font-size:10px;padding:1px 4px;border-radius:3px}
+.dup{background:var(--rd-d);color:var(--rd)}.ddn{background:var(--gn-d);color:var(--gn)}
+/* BNAV */
+.bnav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(11,26,46,.97);backdrop-filter:blur(12px);border-top:1px solid var(--br);padding:8px 14px 16px;display:flex;justify-content:space-between;align-items:center}
+.pbtn{padding:9px 18px;border-radius:7px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--br2);background:var(--bg3);color:var(--tx);font-family:var(--f);transition:all .15s}
+.nbtn{padding:9px 18px;border-radius:7px;font-size:12px;font-weight:500;cursor:pointer;background:var(--acc);border:1px solid var(--acc);color:#fff;font-family:var(--f);transition:all .15s}
+.pbtn:active,.nbtn:active{transform:scale(.96)}
+.pdots{display:flex;gap:3px;align-items:center}
+.pd{width:4px;height:4px;border-radius:50%;background:var(--bg4);transition:all .2s}
+.pd.done{background:var(--gn)}.pd.act{background:var(--acc);width:10px;border-radius:2px}
+/* TOAST */
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(12px);background:var(--bg4);border:1px solid var(--br2);border-radius:9px;padding:9px 16px;font-size:12px;font-weight:500;opacity:0;transition:all .25s;pointer-events:none;z-index:999;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+textarea.fi{resize:vertical;min-height:60px;font-size:12px}
+select.fi option{background:var(--bg3);color:var(--tx)}
+/* PRINT */
+@media print{
+  .hdr,.bnav,.rptact,.shockbox,.dbox,#rptph{display:none!important}
+  body{background:#fff!important;color:#000!important;font-size:10pt}
+  .ts{display:none!important}
+  #ts-report{display:block!important}
+  .main{padding:0!important}
+  .sc,.narr{border:1px solid #ccc!important;background:#fff!important;margin-bottom:8px!important}
+  .rdom{background:#e8eaf6!important;color:#1a237e!important}
+  .rtab th{background:#f5f5f5!important;color:#333!important}
+  .rtab td{border-color:#ddd!important}
+  .rval.vn{background:#d1fae5!important;color:#065f46!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .rval.vm{background:#fef3c7!important;color:#92400e!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .rval.vo{background:#fed7aa!important;color:#9a3412!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .rval.vs{background:#fee2e2!important;color:#991b1b!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .gs-cell{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .gs-n{background:#d1fae5!important;color:#065f46!important}
+  .gs-m{background:#fef3c7!important;color:#92400e!important}
+  .gs-o{background:#fed7aa!important;color:#9a3412!important}
+  .gs-s{background:#fee2e2!important;color:#991b1b!important}
+  .ni .nb{color:#991b1b!important}.ni .ng{color:#065f46!important}.ni .nv{color:#1e40af!important}
+  @page{margin:1.5cm;size:A4}
+}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <div class="banner" id="banner">
+    <div class="bi"><div class="bl">LVEF</div><div class="bv" id="b-ef">—</div></div>
+    <div class="bi"><div class="bl">TAPSE</div><div class="bv" id="b-tapse">—</div></div>
+    <div class="bi"><div class="bl">CO</div><div class="bv" id="b-co">—</div></div>
+    <div class="bi"><div class="bl">CI</div><div class="bv" id="b-ci">—</div></div>
+    <div class="bi"><div class="bl">PASP</div><div class="bv" id="b-pasp">—</div></div>
+    <div class="bi"><div class="bl">E/e'</div><div class="bv" id="b-ee">—</div></div>
+    <div class="bi"><div class="bl">IVC</div><div class="bv" id="b-ivc">—</div></div>
+    <div class="bi"><div class="bl">RAP</div><div class="bv" id="b-rap">—</div></div>
+  </div>
+  <div class="htop">
+    <div class="logo">
+      <div class="lico"><svg viewBox="0 0 24 24"><path d="M12 21.593c-5.63-5.539-11-10.297-11-14.402 0-3.791 3.068-5.191 5.281-5.191 1.312 0 4.151.501 5.719 4.457 1.59-3.968 4.464-4.447 5.726-4.447 2.54 0 5.274 1.621 5.274 5.181 0 4.069-5.136 8.625-11 14.402z"/></svg></div>
+      <div><div class="ltitle">POCUS</div><div class="lsub">Emergency and Critical Care</div></div>
+    </div>
+    <div class="hbtns">
+      <button class="hb" onclick="newStudy()">+ New</button>
+      <button class="hb" onclick="exportJSON()">Export</button>
+      <button class="hb" onclick="importJSON()">Import</button>
+      <button class="hb pri" onclick="showTab('report')">Report</button>
+    </div>
+  </div>
+  <div class="ptstrip" id="ptstrip"><span class="ptb">No patient loaded</span></div>
+  <div class="tnav" id="tnav">
+    <button class="tb2 on" onclick="showTab('patient')" data-tab="patient">Patient<span class="tdot"></span></button>
+    <button class="tb2" onclick="showTab('plax')" data-tab="plax">PLAX<span class="tdot"></span></button>
+    <button class="tb2" onclick="showTab('psax')" data-tab="psax">PSAX<span class="tdot"></span></button>
+    <button class="tb2" onclick="showTab('apical')" data-tab="apical">Apical<span class="tdot"></span></button>
+    <button class="tb2" onclick="showTab('doppler')" data-tab="doppler">Doppler<span class="tdot"></span></button>
+    <button class="tb2" onclick="showTab('valves')" data-tab="valves">Valves<span class="tdot"></span></button>
+    <button class="tb2" onclick="showTab('ivc')" data-tab="ivc">IVC/Peri<span class="tdot"></span></button>
+    <button class="tb2" onclick="showTab('report')" data-tab="report">Report<span class="tdot"></span></button>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ═══ PATIENT ═══ -->
+<div class="ts on" id="ts-patient">
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)"><div class="sct"><div class="sci">🔍</div>Patient Lookup</div><span class="sca">▾</span></div>
+    <div class="scb">
+      <div class="drvst" id="drvRow">
+        <div class="drvdot off" id="drvDot"></div>
+        <span id="drvLbl">Local storage — </span>
+        <button class="hb" style="font-size:10px;padding:3px 8px" onclick="setupDrive()">Connect Google Drive</button>
+        <button class="hb" style="font-size:10px;padding:3px 8px;margin-left:4px" onclick="loadFromDrive()">Load from Drive</button>
+      </div>
+      <div class="ptsrow">
+        <input class="ptsi" id="ptSearch" placeholder="Search by name or hospital number…" oninput="searchPatients(this.value)">
+        <button class="hb" onclick="loadPatientList()">Search</button>
+      </div>
+      <div class="ptlist" id="ptList"></div>
+    </div>
+  </div>
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)"><div class="sct"><div class="sci">👤</div>Demographics</div><span class="sca">▾</span></div>
+    <div class="scb">
+      <div class="fr"><div class="fg"><div class="fl">Surname</div><input class="fi" id="ptSurname" oninput="updateStrip()"></div><div class="fg"><div class="fl">First name</div><input class="fi" id="ptFirst" oninput="updateStrip()"></div></div>
+      <div class="fr"><div class="fg"><div class="fl">Hospital No.</div><input class="fi" id="ptID" oninput="updateStrip()"></div><div class="fg"><div class="fl">DOB</div><input class="fi" type="date" id="ptDOB" onchange="calcAge()"></div></div>
+      <div class="fr3">
+        <div class="fg"><div class="fl">Age<span class="fu">yrs</span></div><div class="fc" id="calcAge">—</div></div>
+        <div class="fg"><div class="fl">Sex</div><div class="tg" style="margin:0"><button class="tb on gn" id="sexM" onclick="setSex('M')">Male</button><button class="tb" id="sexF" onclick="setSex('F')">Female</button></div></div>
+        <div class="fg"><div class="fl">Location</div><input class="fi" id="ptLocation" placeholder="ICU/HDU…"></div>
+      </div>
+      <div class="fr">
+        <div class="fg"><div class="fl">Height<span class="fu">cm</span></div><input class="fi" type="number" id="ptHeight" placeholder="170" oninput="calcBSA()"></div>
+        <div class="fg"><div class="fl">Weight<span class="fu">kg</span></div><input class="fi" type="number" id="ptWeight" placeholder="70" oninput="calcBSA()"></div>
+      </div>
+      <div class="fr">
+        <div class="fg"><div class="fl">BSA (Mosteller)<span class="fu">m²</span></div><div class="fc" id="calcBSA">—</div></div>
+        <div class="fg"><div class="fl">BMI</div><div class="fc" id="calcBMI">—</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)"><div class="sct"><div class="sci">🫀</div>Clinical Context</div><span class="sca">▾</span></div>
+    <div class="scb">
+      <div class="fr"><div class="fg"><div class="fl">Study Date</div><input class="fi" type="date" id="studyDate"></div><div class="fg"><div class="fl">Study Time</div><input class="fi" type="time" id="studyTime"></div></div>
+      <div class="fr">
+        <div class="fg"><div class="fl">Heart Rate<span class="fu">bpm</span></div><input class="fi" type="number" id="heartRate" placeholder="72" oninput="calcHaemo()"><div class="rs c2"><div class="rc rn">Normal 60–100</div><div class="rc rm">Outside normal</div></div></div>
+        <div class="fg"><div class="fl">Image Quality</div><select class="fi" id="imageQuality"><option value="">Select…</option><option>Excellent</option><option>Good</option><option>Adequate</option><option>Suboptimal</option><option>Poor</option></select></div>
+      </div>
+      <div class="tl">ECG Rhythm</div>
+      <div class="tg" id="tg-rhythm"><button class="tb on gn" onclick="setTog(this,'rhythm','Sinus rhythm')">Sinus</button><button class="tb" onclick="setTog(this,'rhythm','Atrial fibrillation')">AF</button><button class="tb" onclick="setTog(this,'rhythm','Atrial flutter')">AFL</button><button class="tb" onclick="setTog(this,'rhythm','Paced rhythm')">Paced</button><button class="tb" onclick="setTog(this,'rhythm','Other')">Other</button></div>
+      <div class="fr3">
+        <div class="fg"><div class="fl">SBP<span class="fu">mmHg</span></div><input class="fi" type="number" id="sbp" placeholder="120" oninput="calcMAP()"><div class="rs c2"><div class="rc rn">Target &gt;65 MAP</div><div class="rc rm">ICU context</div></div></div>
+        <div class="fg"><div class="fl">DBP<span class="fu">mmHg</span></div><input class="fi" type="number" id="dbp" placeholder="80" oninput="calcMAP()"></div>
+        <div class="fg"><div class="fl">MAP<span class="fu">mmHg</span></div><div class="fc" id="calcMAP">—</div></div>
+      </div>
+      <div class="fr">
+        <div class="fg"><div class="fl">CVP<span class="fu">mmHg</span></div><input class="fi" type="number" id="cvp" placeholder="8" oninput="calcPASP()"><div class="rs c2"><div class="rc rn">Normal 0–8</div><div class="rc rm">Elevated &gt;8</div></div></div>
+        <div class="fg"><div class="fl">CVS Support</div><select class="fi" id="cvsSupport"><option value="">None</option><option>Noradrenaline</option><option>Adrenaline</option><option>Vasopressin</option><option>Dobutamine</option><option>Milrinone</option><option>Multiple pressors</option><option>IABP</option><option>VA-ECMO</option></select></div>
+      </div>
+      <div class="tl">Ventilation</div>
+      <div class="tg" id="tg-ventilation"><button class="tb on gn" onclick="setTog(this,'ventilation','Spontaneous')">Spontaneous</button><button class="tb" onclick="setTog(this,'ventilation','NIV/HFNO')">NIV/HFNO</button><button class="tb" onclick="setTog(this,'ventilation','Pressure Support')">Pressure Support</button><button class="tb" onclick="setTog(this,'ventilation','CMV')">CMV</button></div>
+      <div class="fr"><div class="fg"><div class="fl">PEEP<span class="fu">cmH₂O</span></div><input class="fi" type="number" id="peep" placeholder="5"></div><div class="fg"><div class="fl">FiO₂<span class="fu">%</span></div><input class="fi" type="number" id="fio2" placeholder="40"></div></div>
+      <div class="fr1"><div class="fg"><div class="fl">Indication / Clinical Question</div><textarea class="fi" id="indication" rows="2" placeholder="e.g. Haemodynamic instability on vasopressors…"></textarea></div></div>
+      <div class="fr1"><div class="fg"><div class="fl">Relevant History</div><textarea class="fi" id="history" rows="2" placeholder="e.g. Known severe AS, previous CABG…"></textarea></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PLAX ═══ -->
+<div class="ts" id="ts-plax">
+  <div class="ibox">PLAX — end-diastole, inner-edge to inner-edge. Sex toggle updates all reference ranges dynamically.</div>
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)"><div class="sct"><div class="sci">📏</div>LV Linear Dimensions</div><span class="sca">▾</span></div>
+    <div class="scb">
+      <div class="fr3">
+        <div class="fg"><div class="fl">LVIDd<span class="fu">mm</span></div><input class="fi" type="number" id="LVIDd" step="0.1" oninput="gradeLV()"><div class="rs" id="rf-LVIDd"></div></div>
+        <div class="fg"><div class="fl">IVSd<span class="fu">mm</span></div><input class="fi" type="number" id="IVSd" step="0.1" oninput="gradeLV()"><div class="rs" id="rf-IVSd"></div></div>
+        <div class="fg"><div class="fl">LVPWd<span class="fu">mm</span></div><input class="fi" type="number" id="LVPWd" step="0.1" oninput="gradeLV()"><div class="rs" id="rf-LVPWd"></div></div>
+      </div>
+      <div class="fr">
+        <div class="fg"><div class="fl">LVIDs<span class="fu">mm</span></div><input class="fi" type="number" id="LVIDs" step="0.1" oninput="gradeLV()"><div class="rs" id="rf-LVIDs"></div></div>
+        <div class="fg"><div class="fl">FS (Teicholz)<span class="fu">%</span></div><div class="fc" id="calcFS">—</div></div>
+      </div>
+      <div class="cr"><span class="crl">RWT (Relative Wall Thickness)</span><span class="crv" id="calcRWT">—</span></div>
+      <div class="rs c2" style="margin-bottom:8px"><div class="rc rn">Normal RWT 0.22–0.42</div><div class="rc ro">Increased &gt;0.42 (hypertrophy/remodelling)</div></div>
+      <div class="cr"><span class="crl">LV Geometry</span><span class="crv" id="calcGeom">—</span></div>
+      <div class="cr"><span class="crl">LV Mass indexed<span style="font-size:9px;color:var(--tx3);margin-left:3px">g/m²</span></span><span class="crv" id="calcLVMassI">—</span></div>
+      <div class="rs" style="margin-bottom:4px" id="rf-LVMassI"></div>
+    </div>
+  </div>
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)"><div class="sct"><div class="sci">🩸</div>Aorta and LVOT</div><span class="sca">▾</span></div>
+    <div class="scb">
+      <div class="fr">
+        <div class="fg"><div class="fl">LVOT Diameter<span class="fu">mm</span></div><input class="fi" type="number" id="LVOTd" step="0.1" oninput="calcHaemo()"><div class="rs c2"><div class="rc rn">Normal 18–22 mm</div><div class="rc rm">Caution outside range</div></div></div>
+        <div class="fg"><div class="fl">AV Annulus<span class="fu">mm</span></div><input class="fi" type="number" id="AVann" step="0.1"></div>
+      </div>
+      <div class="fr3">
+        <div class="fg"><div class="fl">SoV<span class="fu">mm</span></div><input class="fi" type="number" id="SoV" step="0.1" oninput="gradeAorta()"><div class="rs c2"><div class="rc rn">Normal &lt;40</div><div class="rc rs2">Dilated ≥40</div></div></div>
+        <div class="fg"><div class="fl">STJ<span class="fu">mm</span></div><input class="fi" type="number" id="STJ" step="0.1"><div class="rs c2"><div class="rc rn">Normal &lt;36</div><div class="rc rs2">Dilated ≥36</div></div></div>
+        <div class="fg"><div class="fl">Asc Aorta<span class="fu">mm</span></div><input class="fi" type="number" id="AscAo" step="0.1" oninput="gradeAorta()"><div class="rs c2"><div class="rc rn">Normal &lt;40</div><div class="rc rs2">Dilated ≥40</div></div></div>
+      </div>
+      <div class="fr">
+        <div class="fg"><div class="fl">LA Diameter PLAX<span class="fu">mm</span></div><input class="fi" type="number" id="LAd" step="0.1"><div class="rs c2"><div class="rc rn">Normal &lt;40</div><div class="rc rm">Dilated ≥40</div></div></div>
+        <div class="fg"><div class="fl">RVOT PLAX<span class="fu">mm</span></div><input class="fi" type="number" id="RVOT_PLAX" step="0.1"><div class="rs c2"><div class="rc rn">M:25–43 F:22–40</div><div class="rc rm">Dilated if above</div></div></div>
+      </div>
+      <div class="cr"><span class="crl">Aortic root assessment</span><span class="crv" id="calcAorta">—</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PSAX ═══ -->
+<div class="ts" id="ts-psax">
+  <div class="ibox">PSAX at mid-papillary level for LV FAC. Basal short axis for RVOT and pulmonary valve.</div>
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)"><div class="sct"><div class="sci">⭕</div>LV FAC (Short Axis)</div><span class="sca">▾</span></div>
+    <div class="scb">
+      <div class="fr">
+        <div class="fg"><div class="fl">LVEDA<span class="fu">cm²</span></div><input class="fi" type="number" id="LVEDA" step="0.1" oninput="calcFAC()"><div class="rs c2"><div class="rc rn">Normal &gt;10 cm²</div><div class="rc rs2">Reduced preload &lt;10</div></div></div>
+        <div class="fg"><div class="fl">LVESA<span class="fu">cm²</span></div><input class="fi" type="number" id="LVESA" step="0.1" oninput="calcFAC()"><div class="rs c2"><div class="rc rn">Normal &gt;5.5 cm²/m²</div><div class="rc rs2">Frank hypovolaemia if below</div></div></div>
+      </div>
+      <div class="cr hi"><span class="crl">LV FAC</span><span class="crv" id="calcFAC_val">—</span></div>
+      <div class="rs" style="margin-bottom:8px"><div class="rc rn">Normal ≥35%</div><div class="rc rm">Mild 25–34%</div><div class="rc ro">Moderate 15–24%</div><div class="rc rs2">Severe &lt;15%</div></div>
+      <div class="cr"><span class="crl">LVEDAi<span style="font-size:9px;color:var(--tx3);margin-left:3px">cm²/m²</span></span><span class="crv" id="calcLVEDAi">—</span></div>
+    </div>
+  </div>
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)"><div class="sct"><div class="sci">🔄</div>Wall Motion</div><span class="sca">▾</span></div>
+    <div class="scb">
+      <div class="tl">Global LV Wall Motion</div>
+      <div class="tg" id="tg-wallMotion"><button class="tb on gn" onclick="setTog(this,'wallMotion','Normal')">Normal</button><button class="tb" onclick="setTog(this,'wallMotion','Globally Hypokinetic')">Global Hypokinesia</button><button class="tb" onclick="setTog(this,'wallMotion','Globally Akinetic')">Global Akinesia</button><button class="tb" onclick="setTog(this,'wallMotion','Regional WMA')">Regional WMA</button><button class="tb" onclick="setTog(this,'wallMotion','Hyperkinetic')">Hyperkinetic</button></div>
+      <div id="rwmaDetail" style="display:none;margin-top:6px"><div class="fl" style="margin-bottom:3px">RWMA territory</div><textarea class="fi" id="rwmaText" rows="2" placeholder="e.g. Anterior and anteroseptal hypokinesis (LAD territory)…"></textarea></div>
+    </div>
+  </div>
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)"><div class="sct"><div class="sci">🫁</div>Pulmonary Views</div><span class="sca">▾</span></div>
+    <div class="scb">
+      <div class="fr">
+        <div class="fg"><div class="fl">PA Vmax<span class="fu">cm/s</span></div><input class="fi" type="number" id="PAVmax" step="1"><div class="rs c2"><div class="rc rn">Normal &lt;100 cm/s</div><div class="rc rm">Elevated ≥100</div></div></div>
+        <div class="fg"><div class="fl">PA Acc Time (PAT)<span class="fu">ms</span></div><input class="fi" type="number" id="PAT" step="1" oninput="calcPASP()"><div class="rs"><div class="rc rn">≥100 Normal</div><div class="rc rm">70–99 Borderline</div><div class="rc rs2" style="grid-column:span 2">&lt;70 Elevated PVR</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ APICAL ═══ -->
+<div class="ts" id="ts-apical">
+  <div class="ibox">Apical 4-chamber primary. A2C for biplane. Dedicated RV-focused window for TAPSE M-mode.</div>
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)"><div class="sct"><div class="sci">💙</div>LV Volumes — Simpson's</div><span class="sca">▾</span></div>
+    <div class="scb">
+      <div class="tg" id="tg-volMethod" style="margin-bottom:10px"><button class="tb on" onclick="setTog(this,'volMethod','4C')">A4C only</button><button class="tb" onclick="setTog(this,'volMethod','Biplane')">Biplane</button></div>
+      <div class="fr">
+        <div class="fg"><div class="fl">LVEDV A4C<span class="fu">ml</span></div><input class="fi" type="number" id="LVEDV4C" step="1" oninput="calcEF()"><div class="rs" id="rf-LVEDV4C"></div></div>
+        <div class="fg"><div class="fl">LVESV A4C<span class="fu">ml</span></div><input class="fi" type="number" id="LVESV4C" step="1" oninput="calcEF()"><div class="rs" id="rf-LVESV4C"></div></div>
+      </div>
+      <div class="fr">
+        <div class="fg"><div class="fl">LVEDV A2C<span class="fu">ml</span></div><input class="fi" type="number" id="LVEDV2C" step="1" oninput="calcEF()"></div>
+        <div class="fg"><div class="fl">LVESV A2C<span class="fu">ml</span></div><input class="fi" type="number" id="LVESV2C" step="1" oninput="calcEF()"></div>
+      </div>
+      <div class="cr"><span class="crl">LVEDV (used)</span><span class="crv" id="calcLVEDV">—</span></div>
+      <div class="cr"><span class="crl">LVESV (used)</span><span class="crv" id="calcLVESV">—</span></div>
+      <div class="cr hi"><span class="crl">LVEF (Simpson's)</span><span class="crv" style="font-size:20px" id="calcEF">—</span></div>
+      <div class="rs" style="margin-bottom:8px"><div class="rc rn">Normal ≥55%</div><div class="rc rm">Borderline 50–54%</div><div class="rc ro">Impaired 35–49%</div><div class="rc rs2">Severely Impaired &lt;35%</div></div>
+      <div class="cr"><span class="crl">EF grade</span><span class="crv" id="calcEF_grade">—</span></div>
+      <div class="cr"><span class="crl">LVEDVi / LVESVi<span style="font-size:9px;color:var(--tx3);margin-left:3px">ml/m²</span></span><span class="crv" id="calcVolI">—</span></div>
+    </div>
+  </div>
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)"><div class="sct"><div class="sci">💚</div>RV Assessment</div><span class="sca">▾</span></div>
+    <div class="scb">
+      <div class="fr3">
+        <div class="fg"><div class="fl">RV Base<span class="fu">mm</span></div><input class="fi" type="number" id="RVbase" step="0.1" oninput="gradeRV()"><div class="rs" id="rf-RVbase"></div></div>
+        <div class="fg"><div class="fl">RV Mid<span class="fu">mm</span></div><input class="fi" type="number" id="RVmid" step="0.1"><div class="rs c2"><div class="rc rn">M≤35 F≤32 mm</div><div class="rc rm">Dilated if above</div></div></div>
+        <div class="fg"><div class="fl">RV Length<span class="fu">mm</span></div><input class="fi" type="number" id="RVlength" step="0.1"><div class="rs c2"><div class="rc rn">M≤83 F≤79 mm</div><div class="rc rm">Dilated if above</div></div></div>
+      </div>
+      <div class="fr">
+        <div class="fg"><div class="fl">TAPSE<span class="fu">mm</span></div><input class="fi" type="number" id="TAPSE" step="0.1" oninput="gradeRV()"><div class="rs"><div class="rc rn">≥17 Normal</div><div class="rc rm">14–16 Borderline</div><div class="rc rs2" style="grid-column:span 2">&lt;14 Impaired</div></div></div>
+        <div class="fg"><div class="fl">RV S' TDI<span class="fu">cm/s</span></div><input class="fi" type="number" id="RVs" step="0.1" oninput="gradeRV()"><div class="rs c2"><div class="rc rn">Normal ≥10 cm/s</div><div class="rc rs2">&lt;10 Impaired</div></div></div>
+      </div>
+      <div class="fr">
+        <div class="fg"><div class="fl">RV EDA<span class="fu">cm²</span></div><input class="fi" type="number" id="RVEDA" step="0.1" oninput="gradeRV()"><div class="rs c2"><div class="rc rn">M≤25 F≤22 cm²</div><div class="rc rm">Dilated if above</div></div></div>
+        <div class="fg"><div class="fl">RV ESA<span class="fu">cm²</span></div><input class="fi" type="number" id="RVESA" step="0.1" oninput="gradeRV()"></div>
+      </div>
+      <div class="cr hi"><span class="crl">RV FAC</span><span class="crv" id="calcRVFAC">—</span></div>
+      <div class="rs" style="margin-bottom:8px"><div class="rc rn">≥35% Normal</div><div class="rc rm">25–34% Mild</div><div class="rc ro">15–24% Moderate</div><div class="rc rs2">&lt;15% Severe</div></div>
+      <div class="cr"><span class="crl">RV/LV ratio (basal)</span><span class="crv" id="calcRVLV">—</span></div>
+      <div class="rs c2" style="margin-bottom:8px"><div class="rc rn">Normal &lt;1.0</div><div class="rc ro">RV dilatation ≥1.0</div></div>
+      <div class="fr">
+        <div class="fg"><div class="fl">RV Wall Thickness<span class="fu">mm</span></div><input class="fi" type="number" id="RVwall" step="0.1"><div class="rs c2"><div class="rc rn">Normal ≤5 mm</div><div class="rc ro">Hypertrophy &gt;5 mm</div></div></div>
+        <div class="fg"><div class="fl">MAPSE<span class="fu">mm</span></div><input class="fi" type="number" id="MAPSE" step="0.1"><div class="rs c2"><div class="rc rn">Normal ≥8 mm</div><div class="rc rs2">Reduced &lt;8 mm</div></div></div>
+      </div>
+      <div class="tl">Septal Motion / D-Sign</div>
+      <div class="tg" id="tg-dSign"><button class="tb on gn" onclick="setTog(this,'dSign','Normal')">Normal</button><button class="tb" onclick="setTog(this,'dSign','Pressure overload D-sign')">Pressure D-sign</button><button class="tb" onclick="setTog(this,'dSign','Volume overload D-sign')">Volume D-sign</button><button class="tb" onclick="setTog(this,'dSign','Paradoxical septal motion')">Paradoxical</button></div>
+    </div>
+  </div>
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)"><div class="sct"><div class="sci">🔵</div>LA Volume</div><span class="sca">▾</span></div>
+    <div class="scb">
+      <div class="fr">
+        <div class="fg"><div class="fl">LA Volume biplane<span class="fu">ml</span></div><input class="fi" type="number" id="LAVol" step="1" oninput="gradeLAVol()"></div>
+        <div class="fg"><div class="fl">LAVi<span class="fu">ml/m²</span></div><div class="fc" id="calcLAVi">—</div></div>
+      </div>
+      <div class="rs" style="margin-bottom:4px"><div class="rc rn">Normal &lt;34</div><div class="rc rm">Borderline 34–38</div><div class="rc ro">Dilated 39–48</div><div class="rc rs2">Severely dilated &gt;48</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ DOPPLER ═══ -->
+<div class="ts" id="ts-doppler">
+  <div class="ibox">Pulsed-wave, CW Doppler and TDI. All haemodynamic values auto-calculated from entries.</div>
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)"><div class="sct"><div class="sci">📊</div>LVOT and Cardiac Output</div><span class="sca">▾</span></div>
+    <div class="scb">
+      <div class="fr">
+        <div class="fg"><div class="fl">LVOT VTI<span class="fu">cm</span></div><input class="fi" type="number" id="LVOTVTI" step="0.1" oninput="calcHaemo()"><div class="rs c2"><div class="rc rn">Normal 18–22 cm</div><div class="rc rm">Reduced &lt;18</div></div></div>
+        <div class="fg"><div class="fl">LVOT Vmax<span class="fu">cm/s</span></div><input class="fi" type="number" id="LVOTVmax" step="1"><div class="rs c2"><div class="rc rn">Normal &lt;100 cm/s</div><div class="rc ro">Elevated &gt;150</div></div></div>
+      </div>
+      <div class="cr hi"><span class="crl">Stroke Volume</span><span class="crv" id="calcSV">—</span></div>
+      <div class="rs c2" style="margin-bottom:8px"><div class="rc rn">Normal 60–100 ml</div><div class="rc rm">Reduced &lt;60 ml</div></div>
+      <div class="cr hi"><span class="crl">Cardiac Output</span><span class="crv" id="calcCO">—</span></div>
+      <div class="rs c2" style="margin-bottom:8px"><div class="rc rn">Normal 4–8 L/min</div><div class="rc rs2">Low &lt;3.5 L/min</div></div>
+      <div class="cr hi"><span class="crl">Cardiac Index</span><span class="crv" id="calcCI">—</span></div>
+      <div class="rs c2" style="margin-bottom:8px"><div class="rc rn">Normal 2.2–4.0</div><div class="rc rs2">Cardiogenic shock &lt;1.8</div></div>
+      <div class="cr"><span class="crl">SVRI<span style="font-size:9px;color:var(--tx3);margin-left:3px">dyn·s·cm⁻⁵·m²</span></span><span class="crv" id="calcSVRI">—</span></div>
+      <div class="rs c2" style="margin-bottom:4px"><div class="rc rn">Normal 1760–2600</div><div class="rc rm">Low &lt;1760 distributive</div></div>
+    </div>
+  </div>
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)"><div class="sct"><div class="sci">🌊</div>Mitral Inflow and TDI</div><span class="sca">▾</span></div>
+    <div class="scb">
+      <div class="fr3">
+        <div class="fg"><div class="fl">MV E<span class="fu">cm/s</span></div><input class="fi" type="number" id="MVE" step="1" oninput="calcDiastolic()"><div class="rs c1"><div class="rc rn">Normal 50–100</div></div></div>
+        <div class="fg"><div class="fl">MV A<span class="fu">cm/s</span></div><input class="fi" type="number" id="MVA" step="1" oninput="calcDiastolic()"></div>
+        <div class="fg"><div class="fl">Dec Time<span class="fu">ms</span></div><input class="fi" type="number" id="MVDecTime" step="1"><div class="rs c1"><div class="rc rn">Normal 150–250 ms</div></div></div>
+      </div>
+      <div class="cr"><span class="crl">E/A ratio</span><span class="crv" id="calcEA">—</span></div>
+      <div class="rs" style="margin-bottom:8px"><div class="rc rn">Normal 0.8–2.0</div><div class="rc rm">Impaired relaxation &lt;0.8</div><div class="rc rs2" style="grid-column:span 2">Restrictive &gt;2.0</div></div>
+      <div class="tl">Pulmonary Vein Flow</div>
+      <div class="tg" id="tg-pvFlow"><button class="tb" onclick="setTog(this,'pvFlow','S dominant')">S dominant</button><button class="tb" onclick="setTog(this,'pvFlow','S = D')">S = D</button><button class="tb" onclick="setTog(this,'pvFlow','D dominant')">D dominant</button><button class="tb" onclick="setTog(this,'pvFlow','S blunted')">S blunted</button><button class="tb" onclick="setTog(this,'pvFlow','S reversal')">S reversal</button><button class="tb on gn" onclick="setTog(this,'pvFlow','Not assessed')">N/A</button></div>
+      <hr class="divider">
+      <div class="tl">TDI — Lateral annulus</div>
+      <div class="fr3">
+        <div class="fg"><div class="fl">Lat e'<span class="fu">cm/s</span></div><input class="fi" type="number" id="latE" step="0.1" oninput="calcDiastolic()"><div class="rs c1" id="rf-latE"></div></div>
+        <div class="fg"><div class="fl">Lat a'<span class="fu">cm/s</span></div><input class="fi" type="number" id="latA" step="0.1"></div>
+        <div class="fg"><div class="fl">Lat s'<span class="fu">cm/s</span></div><input class="fi" type="number" id="latS" step="0.1"><div class="rs c1"><div class="rc rn">Normal ≥8 cm/s</div></div></div>
+      </div>
+      <div class="tl">TDI — Septal annulus</div>
+      <div class="fr3">
+        <div class="fg"><div class="fl">Sep e'<span class="fu">cm/s</span></div><input class="fi" type="number" id="sepE" step="0.1" oninput="calcDiastolic()"><div class="rs c1" id="rf-sepE"></div></div>
+        <div class="fg"><div class="fl">Sep a'<span class="fu">cm/s</span></div><input class="fi" type="number" id="sepA" step="0.1"></div>
+        <div class="fg"><div class="fl">Sep s'<span class="fu">cm/s</span></div><input class="fi" type="number" id="sepS" step="0.1"><div class="rs c1"><div class="rc rn">Normal ≥6 cm/s</div></div></div>
+      </div>
+      <div class="cr"><span class="crl">Mean e' (lat+sep/2)</span><span class="crv" id="calcMeanE">—</span></div>
+      <div class="cr hi"><span class="crl">E/e' ratio (mean)</span><span class="crv" style="font-size:18px" id="calcEeRatio">—</span></div>
+      <div class="rs" style="margin-bottom:8px"><div class="rc rn">Normal &lt;8</div><div class="rc rm">Indeterminate 8–14</div><div class="rc rs2" style="grid-column:span 2">Elevated filling pressures &gt;14</div></div>
+      <div class="cr hi" style="background:rgba(30,47,80,.8);border:1px solid rgba(59,130,246,.25)">
+        <span class="crl" style="color:var(--tx);font-weight:600">Diastolic grade (BSE 2024)</span>
+        <span class="crv" id="calcDiastGrade" style="font-size:11px;text-align:right;max-width:55%;white-space:normal">—</span>
+      </div>
+    </div>
+  </div>
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)"><div class="sct"><div class="sci">📈</div>TR Velocity and PASP</div><span class="sca">▾</span></div>
+    <div class="scb">
+      <div class="fr">
+        <div class="fg"><div class="fl">TR Vmax<span class="fu">m/s</span></div><input class="fi" type="number" id="TRVmax" step="0.01" oninput="calcPASP()"><div class="rs c2"><div class="rc rn">Normal ≤2.8 m/s</div><div class="rc rm">Suggests PH if &gt;2.8</div></div></div>
+        <div class="fg"><div class="fl">PASP (4v²+RAP)<span class="fu">mmHg</span></div><div class="fc" id="calcPASP">—</div></div>
+      </div>
+      <div class="rs" style="margin-bottom:8px"><div class="rc rn">Normal ≤35</div><div class="rc rm">Mild PH 36–50</div><div class="rc ro">Moderate PH 51–70</div><div class="rc rs2">Severe PH &gt;70</div></div>
+      <div class="cr"><span class="crl">PASP interpretation</span><span class="crv" id="calcPASP_interp">—</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ VALVES ═══ -->
+<div class="ts" id="ts-valves">
+  <div class="ibox">BSE valve disease poster 2024. Qualitative severity first, quantitative confirmation where available.</div>
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)"><div class="sct"><div class="sci">🔺</div>Aortic Valve</div><span class="sca">▾</span></div>
+    <div class="scb">
+      <div class="tl">Morphology</div>
+      <div class="tg" id="tg-avMorph"><button class="tb on gn" onclick="setTog(this,'avMorph','Trileaflet')">Trileaflet</button><button class="tb" onclick="setTog(this,'avMorph','Bicuspid')">Bicuspid</button><button class="tb" onclick="setTog(this,'avMorph','Prosthetic')">Prosthetic</button><button class="tb" onclick="setTog(this,'avMorph','Calcified/restricted')">Calcified</button></div>
+      <hr class="divider">
+      <div class="tl">Aortic Stenosis — Severity</div>
+      <div class="srow" id="sv-AS"><button class="sb a0" onclick="setSev(this,'AS',0)">None</button><button class="sb" onclick="setSev(this,'AS',1)">Trace</button><button class="sb" onclick="setSev(this,'AS',2)">Mild</button><button class="sb" onclick="setSev(this,'AS',3)">Moderate</button><button class="sb" onclick="setSev(this,'AS',4)">Severe</button></div>
+      <div class="fr3">
+        <div class="fg"><div class="fl">AV Vmax<span class="fu">m/s</span></div><input class="fi" type="number" id="AVVmax" step="0.01" oninput="calcAV()"><div class="rs"><div class="rc rn">&lt;2.5</div><div class="rc rm">2.5–3.9</div><div class="rc ro">4.0–4.9</div><div class="rc rs2">≥5.0</div></div></div>
+        <div class="fg"><div class="fl">AV Mean PG<span class="fu">mmHg</span></div><input class="fi" type="number" id="AVMeanPG" step="1" oninput="calcAV()"><div class="rs"><div class="rc rn">&lt;20</div><div class="rc rm">20–39</div><div class="rc ro">40–59</div><div class="rc rs2">≥60</div></div></div>
+        <div class="fg"><div class="fl">AV VTI<span class="fu">cm</span></div><input class="fi" type="number" id="AVVTI" step="0.1" oninput="calcAV()"></div>
+      </div>
+      <div class="cr"><span class="crl">AVA (continuity eq.)</span><span class="crv" id="calcAVA">—</span></div>
+      <div class="rs" style="margin-bottom:8px"><div class="rc rn">&gt;1.5 cm² Mild/None</div><div class="rc rm">1.0–1.5 Moderate</div><div class="rc ro">&lt;1.0 Severe</div><div class="rc rs2">≤0.6 Very Severe</div></div>
+      <div class="cr"><span class="crl">AVAi / Doppler Index (DI)</span><span class="crv" id="calcAVAi">—</span></div>
+      <div class="rs c2" style="margin-bottom:4px"><div class="rc rn">DI &gt;0.5 Mild/None</div><div class="rc rs2">DI &lt;0.25 Severe</div></div>
+      <hr class="divider">
+      <div class="tl">Aortic Regurgitation — Severity</div>
+      <div class="srow" id="sv-AR"><button class="sb a0" onclick="setSev(this,'AR',0)">None</button><button class="sb" onclick="setSev(this,'AR',1)">Trace</button><button class="sb" onclick="setSev(this,'AR',2)">Mild</button><button class="sb" onclick="setSev(this,'AR',3)">Moderate</button><button class="sb" onclick="setSev(this,'AR',4)">Severe</button></div>
+      <div class="fr">
+        <div class="fg"><div class="fl">AR VC width<span class="fu">cm</span></div><input class="fi" type="number" id="ARVC" step="0.01" oninput="fiG('ARVC',num('ARVC')<0.3?'gn':num('ARVC')<=0.6?'or':'rd')"><div class="rs"><div class="rc rn">&lt;0.3 Mild</div><div class="rc rm">0.3–0.6 Mod</div><div class="rc rs2" style="grid-column:span 2">&gt;0.6 Severe</div></div></div>
+        <div class="fg"><div class="fl">AR PHT<span class="fu">ms</span></div><input class="fi" type="number" id="ARPHT" step="1" oninput="fiG('ARPHT',num('ARPHT')>500?'gn':num('ARPHT')>=200?'am':'rd')"><div class="rs"><div class="rc rn">&gt;500 Mild</div><div class="rc rm">200–500 Mod</div><div class="rc rs2" style="grid-column:span 2">&lt;200 Severe</div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)"><div class="sct"><div class="sci">🔴</div>Mitral Valve</div><span class="sca">▾</span></div>
+    <div class="scb">
+      <div class="tl">MR Mechanism (Carpentier)</div>
+      <div class="tg" id="tg-mrMech"><button class="tb" onclick="setTog(this,'mrMech','Type I — Annular dilatation')">Type I</button><button class="tb" onclick="setTog(this,'mrMech','Type II — Leaflet prolapse/flail')">Type II</button><button class="tb" onclick="setTog(this,'mrMech','Type IIIb — Restriction')">Type IIIb</button><button class="tb" onclick="setTog(this,'mrMech','Functional/Secondary')">Functional</button></div>
+      <div class="tl">Mitral Regurgitation — Severity</div>
+      <div class="srow" id="sv-MR"><button class="sb a0" onclick="setSev(this,'MR',0)">None</button><button class="sb" onclick="setSev(this,'MR',1)">Trace</button><button class="sb" onclick="setSev(this,'MR',2)">Mild</button><button class="sb" onclick="setSev(this,'MR',3)">Moderate</button><button class="sb" onclick="setSev(this,'MR',4)">Severe</button></div>
+      <div class="fr">
+        <div class="fg"><div class="fl">MR VC width<span class="fu">cm</span></div><input class="fi" type="number" id="MRVC" step="0.01" oninput="fiG('MRVC',num('MRVC')<0.3?'gn':num('MRVC')<0.7?'or':'rd')"><div class="rs"><div class="rc rn">&lt;0.3 Mild</div><div class="rc rm">0.3–0.69 Mod</div><div class="rc rs2" style="grid-column:span 2">≥0.7 Severe</div></div></div>
+        <div class="fg"><div class="fl">MR PISA radius<span class="fu">cm</span></div><input class="fi" type="number" id="MRPISA" step="0.01" oninput="calcMR()"></div>
+      </div>
+      <div class="cr"><span class="crl">MR EROA (PISA)</span><span class="crv" id="calcMREROA">—</span></div>
+      <div class="rs" style="margin-bottom:8px"><div class="rc rn">&lt;0.2 cm² Mild</div><div class="rc rm">0.2–0.39 Moderate</div><div class="rc rs2" style="grid-column:span 2">≥0.4 cm² Severe</div></div>
+      <hr class="divider">
+      <div class="tl">Mitral Stenosis — Severity</div>
+      <div class="srow" id="sv-MS"><button class="sb a0" onclick="setSev(this,'MS',0)">None</button><button class="sb" onclick="setSev(this,'MS',1)">Trace</button><button class="sb" onclick="setSev(this,'MS',2)">Mild</button><button class="sb" onclick="setSev(this,'MS',3)">Moderate</button><button class="sb" onclick="setSev(this,'MS',4)">Severe</button></div>
+      <div class="fr">
+        <div class="fg"><div class="fl">MV Mean PG<span class="fu">mmHg</span></div><input class="fi" type="number" id="MVMeanPG" step="0.1"><div class="rs"><div class="rc rn">&lt;5 Mild/None</div><div class="rc rm">5–10 Moderate</div><div class="rc rs2" style="grid-column:span 2">&gt;10 Severe</div></div></div>
+        <div class="fg"><div class="fl">MV PHT<span class="fu">ms</span></div><input class="fi" type="number" id="MVPHT" step="1" oninput="calcMVA()"><div class="rs c2"><div class="rc rn">&lt;150 ms Mild/None</div><div class="rc rs2">≥220 ms Severe</div></div></div>
+      </div>
+      <div class="cr"><span class="crl">MVA (PHT method)</span><span class="crv" id="calcMVA_val">—</span></div>
+      <div class="rs" style="margin-bottom:4px"><div class="rc rn">&gt;1.5 cm²</div><div class="rc rm">1.0–1.5 Moderate</div><div class="rc rs2" style="grid-column:span 2">&lt;1.0 Severe</div></div>
+    </div>
+  </div>
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)"><div class="sct"><div class="sci">🟡</div>Tricuspid and Pulmonary Valves</div><span class="sca">▾</span></div>
+    <div class="scb">
+      <div class="tl">Tricuspid Regurgitation — Severity</div>
+      <div class="srow" id="sv-TR"><button class="sb a0" onclick="setSev(this,'TR',0)">None</button><button class="sb" onclick="setSev(this,'TR',1)">Trace</button><button class="sb" onclick="setSev(this,'TR',2)">Mild</button><button class="sb" onclick="setSev(this,'TR',3)">Moderate</button><button class="sb" onclick="setSev(this,'TR',4)">Severe</button></div>
+      <div class="fg" style="margin-bottom:10px"><div class="fl">TR VC width<span class="fu">cm</span></div><input class="fi" type="number" id="TRVC" step="0.01" oninput="fiG('TRVC',num('TRVC')<0.3?'gn':num('TRVC')<0.7?'or':'rd')"><div class="rs"><div class="rc rn">&lt;0.3 Mild</div><div class="rc rm">0.3–0.69 Mod</div><div class="rc rs2" style="grid-column:span 2">≥0.7 Severe</div></div></div>
+      <div class="tl">Pulmonary Regurgitation — Severity</div>
+      <div class="srow" id="sv-PR"><button class="sb a0" onclick="setSev(this,'PR',0)">None</button><button class="sb" onclick="setSev(this,'PR',1)">Trace</button><button class="sb" onclick="setSev(this,'PR',2)">Mild</button><button class="sb" onclick="setSev(this,'PR',3)">Moderate</button><button class="sb" onclick="setSev(this,'PR',4)">Severe</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ IVC / PERI ═══ -->
+<div class="ts" id="ts-ivc">
+  <div class="ibox">IVC from subcostal long axis. Respiratory variation interpreted in context of ventilation mode.</div>
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)"><div class="sct"><div class="sci">💧</div>IVC and Preload</div><span class="sca">▾</span></div>
+    <div class="scb">
+      <div class="fr">
+        <div class="fg"><div class="fl">IVC max<span class="fu">mm</span></div><input class="fi" type="number" id="IVCmax" step="0.1" oninput="calcIVC()"><div class="rs c2"><div class="rc rn">Normal &lt;21 mm</div><div class="rc ro">Plethoric ≥21 mm</div></div></div>
+        <div class="fg"><div class="fl">IVC min<span class="fu">mm</span></div><input class="fi" type="number" id="IVCmin" step="0.1" oninput="calcIVC()"><div class="rs c2"><div class="rc rn">Collapse expected in norm</div><div class="rc rm">Fixed = raised RAP</div></div></div>
+      </div>
+      <div class="tl">Respiratory Variation</div>
+      <div class="tg" id="tg-ivcResp"><button class="tb" onclick="setTog(this,'ivcResp','>50% collapse')">&gt;50% collapse</button><button class="tb" onclick="setTog(this,'ivcResp','21–50% collapse')">21–50%</button><button class="tb" onclick="setTog(this,'ivcResp','≤20% collapse')">≤20%</button><button class="tb" onclick="setTog(this,'ivcResp','Distension on PPV')">Distension PPV</button><button class="tb on gn" onclick="setTog(this,'ivcResp','Not assessed')">N/A</button></div>
+      <div class="cr"><span class="crl">IVC CI (%)</span><span class="crv" id="calcIVCCI">—</span></div>
+      <div class="cr hi"><span class="crl" style="color:var(--acc2)">Estimated RAP</span><span class="crv" id="calcRAP">—</span></div>
+      <div class="rs" style="margin-bottom:8px"><div class="rc rn">Low 3 mmHg</div><div class="rc rm">Intermediate 8 mmHg</div><div class="rc rs2" style="grid-column:span 2">Elevated 15 mmHg</div></div>
+      <div class="cr"><span class="crl" style="flex-shrink:0">Fluid context</span><span class="crv" id="calcFluid" style="font-size:10px;text-align:right;max-width:60%;white-space:normal">—</span></div>
+      <hr class="divider">
+      <div class="tl">PLR / Fluid Challenge (optional)</div>
+      <div class="fr">
+        <div class="fg"><div class="fl">Pre-PLR LVOT VTI<span class="fu">cm</span></div><input class="fi" type="number" id="prePLR" step="0.1" oninput="calcPLR()"></div>
+        <div class="fg"><div class="fl">Post-PLR LVOT VTI<span class="fu">cm</span></div><input class="fi" type="number" id="postPLR" step="0.1" oninput="calcPLR()"></div>
+      </div>
+      <div class="cr"><span class="crl">PLR delta VTI (%)</span><span class="crv" id="calcPLR_val">—</span></div>
+      <div class="rs c2" style="margin-bottom:4px"><div class="rc rn">Responsive ≥10%</div><div class="rc rm">Not responsive &lt;10%</div></div>
+    </div>
+  </div>
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)"><div class="sct"><div class="sci">🫀</div>Pericardium</div><span class="sca">▾</span></div>
+    <div class="scb">
+      <div class="tl">Pericardial Effusion</div>
+      <div class="tg" id="tg-pericEff"><button class="tb on gn" onclick="setTog(this,'pericEff','None')">None</button><button class="tb" onclick="setTog(this,'pericEff','Trivial')">Trivial</button><button class="tb" onclick="setTog(this,'pericEff','Small (<10mm)')">Small</button><button class="tb" onclick="setTog(this,'pericEff','Moderate (10–20mm)')">Moderate</button><button class="tb" onclick="setTog(this,'pericEff','Large (>20mm)')">Large</button></div>
+      <div id="tampBox" style="display:none;margin-top:6px">
+        <div class="tl">Tamponade Features</div>
+        <div class="tg" id="tg-tamp"><button class="tb" onclick="setMulti(this,'tamp_ra')">RA collapse</button><button class="tb" onclick="setMulti(this,'tamp_rv')">RV diastolic collapse</button><button class="tb" onclick="setMulti(this,'tamp_ivc')">IVC plethora</button><button class="tb" onclick="setMulti(this,'tamp_resp')">MV respiratory variation</button><button class="tb" onclick="setMulti(this,'tamp_sw')">Swinging heart</button></div>
+      </div>
+      <div class="tl" style="margin-top:8px">Pericardial Thickening</div>
+      <div class="tg" id="tg-pericThick"><button class="tb on gn" onclick="setTog(this,'pericThick','None')">None</button><button class="tb" onclick="setTog(this,'pericThick','Thickened')">Thickened</button><button class="tb" onclick="setTog(this,'pericThick','Calcified')">Calcified</button><button class="tb" onclick="setTog(this,'pericThick','Constrictive features')">Constrictive features</button></div>
+    </div>
+  </div>
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)"><div class="sct"><div class="sci">📝</div>Additional Findings</div><span class="sca">▾</span></div>
+    <div class="scb">
+      <div class="tl">Pleural Effusions — Left</div>
+      <div class="tg" id="tg-pleuralL"><button class="tb on gn" onclick="setTog(this,'pleuralL','None L')">None L</button><button class="tb" onclick="setTog(this,'pleuralL','Small L')">Small L</button><button class="tb" onclick="setTog(this,'pleuralL','Moderate L')">Mod L</button><button class="tb" onclick="setTog(this,'pleuralL','Large L')">Large L</button></div>
+      <div class="tl">Pleural Effusions — Right</div>
+      <div class="tg" id="tg-pleuralR"><button class="tb on gn" onclick="setTog(this,'pleuralR','None R')">None R</button><button class="tb" onclick="setTog(this,'pleuralR','Small R')">Small R</button><button class="tb" onclick="setTog(this,'pleuralR','Moderate R')">Mod R</button><button class="tb" onclick="setTog(this,'pleuralR','Large R')">Large R</button></div>
+      <div class="fr1" style="margin-top:8px"><div class="fg"><div class="fl">Additional Findings</div><textarea class="fi" id="additionalFindings" rows="3" placeholder="Intracardiac masses, thrombus, vegetations, congenital findings…"></textarea></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ REPORT ═══ -->
+<div class="ts" id="ts-report">
+  <div class="rptact">
+    <button class="rptb pri" onclick="generateReport()">Generate</button>
+    <button class="rptb" onclick="copyReport()">Copy</button>
+    <button class="rptb" onclick="printReport()">PDF / Print</button>
+    <button class="rptb" onclick="saveStudy()">Save</button>
+    <button class="rptb drv" onclick="saveToDrive()">Drive</button>
+  </div>
+  <div id="rptCont" style="display:none">
+    <div id="rptHdr" class="narr" style="margin-bottom:10px"></div>
+    <div id="shockDiv"></div>
+    <div id="deltaDiv"></div>
+    <div id="rptTableWrap" class="sc"></div>
+    <div class="narr" id="rptNarr"></div>
+  </div>
+  <div id="rptph" style="text-align:center;padding:40px 20px;color:var(--tx3)">
+    <div style="font-size:36px;margin-bottom:10px">📋</div>
+    <div style="font-size:13px;font-weight:500;color:var(--tx2);margin-bottom:5px">No report generated</div>
+    <div style="font-size:11px">Complete echo parameters then tap Generate</div>
+  </div>
+</div>
+
+</div>
+
+<div class="bnav">
+  <button class="pbtn" id="prevBtn" onclick="navPrev()">Back</button>
+  <div class="pdots" id="pdots"></div>
+  <button class="nbtn" id="nextBtn" onclick="navNext()">Next</button>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════
+var TABS = ['patient','plax','psax','apical','doppler','valves','ivc','report'];
+var curTab = 0;
+var SEV_LABELS = ['None','Trace','Mild','Moderate','Severe'];
+var TS = {
+  rhythm:'Sinus rhythm', ventilation:'Spontaneous', wallMotion:'Normal', dSign:'Normal',
+  volMethod:'4C', pvFlow:'Not assessed', pericEff:'None', pericThick:'None',
+  pleuralL:'None L', pleuralR:'None R', avMorph:'Trileaflet', mrMech:'',
+  ivcResp:'Not assessed', sex:'M', age:50
+};
+var SEV = { AS:0, AR:0, MR:0, MS:0, TR:0, PR:0 };
+var MT = { tamp_ra:false, tamp_rv:false, tamp_ivc:false, tamp_resp:false, tamp_sw:false };
+var driveToken = null;
+
+window.addEventListener('load', function() {
+  var n = new Date();
+  document.getElementById('studyDate').value = n.toISOString().slice(0,10);
+  document.getElementById('studyTime').value = n.toTimeString().slice(0,5);
+  buildDots(); loadPatientList(); updateRefStrips();
+});
+
+// ═══════════════════════════════════════════
+// NAV
+// ═══════════════════════════════════════════
+function showTab(name) {
+  var i = TABS.indexOf(name);
+  if (i >= 0) curTab = i;
+  TABS.forEach(function(t,j) {
+    var el = document.getElementById('ts-'+t);
+    if (el) el.className = 'ts'+(j===curTab?' on':'');
+    document.querySelectorAll('.tb2').forEach(function(b) { if(b.dataset.tab===t) b.classList.toggle('on',j===curTab); });
+  });
+  document.getElementById('prevBtn').style.opacity = curTab===0?'0.3':'1';
+  document.getElementById('nextBtn').textContent = curTab===TABS.length-1?'Report':'Next';
+  buildDots(); window.scrollTo(0,0);
+}
+function navNext() { if(curTab<TABS.length-1) showTab(TABS[curTab+1]); else generateReport(); }
+function navPrev() { if(curTab>0) showTab(TABS[curTab-1]); }
+function buildDots() {
+  document.getElementById('pdots').innerHTML = TABS.map(function(t,i) {
+    return '<div class="pd '+(i<curTab?'done':i===curTab?'act':'')+'"></div>';
+  }).join('');
+}
+function markDone(tab) { document.querySelectorAll('.tb2').forEach(function(b) { if(b.dataset.tab===tab) b.classList.add('done'); }); }
+
+// ═══════════════════════════════════════════
+// UI
+// ═══════════════════════════════════════════
+function toggleSC(h) { h.closest('.sc').classList.toggle('col'); }
+
+function setTog(btn, key, val) {
+  TS[key] = val;
+  var grp = btn.closest('.tg'); if(!grp) return;
+  grp.querySelectorAll('.tb').forEach(function(b) { b.className='tb'; });
+  btn.classList.add('tb','on');
+  var good = ['Sinus rhythm','Spontaneous','Normal','None','Trileaflet','Not assessed','None L','None R'].indexOf(val)>=0;
+  if(good) btn.classList.add('gn');
+  if(key==='pericEff') { document.getElementById('tampBox').style.display=(val.indexOf('Moderate')>=0||val.indexOf('Large')>=0)?'block':'none'; }
+  if(key==='wallMotion') { document.getElementById('rwmaDetail').style.display=val.indexOf('Regional')>=0?'block':'none'; }
+  if(key==='sex') { TS.sex=val; updateRefStrips(); gradeLV(); gradeRV(); }
+  calcDiastolic(); calcIVC();
+}
+function setMulti(btn, key) { MT[key]=!MT[key]; btn.classList.toggle('on',MT[key]); }
+function setSev(btn, valve, level) {
+  SEV[valve]=level;
+  var row=document.getElementById('sv-'+valve); if(!row) return;
+  row.querySelectorAll('.sb').forEach(function(b){b.className='sb';});
+  btn.classList.add('a'+level);
+}
+function setSex(s) {
+  TS.sex=s;
+  document.getElementById('sexM').className='tb'+(s==='M'?' on gn':'');
+  document.getElementById('sexF').className='tb'+(s==='F'?' on gn':'');
+  updateRefStrips(); gradeLV(); gradeRV();
+}
+function showToast(msg,dur) { dur=dur||2200; var t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(function(){t.classList.remove('show');},dur); }
+function num(id) { return parseFloat((document.getElementById(id)||{}).value)||0; }
+function setFC(id,txt) { var e=document.getElementById(id); if(e) e.textContent=txt||'—'; }
+function getBSA() { var h=num('ptHeight'),w=num('ptWeight'); return(h&&w)?Math.sqrt(h*w/3600):0; }
+function fiG(id,cls) { var e=document.getElementById(id); if(!e) return; e.className='fi'+(cls?' '+cls:''); }
+function banner(id,txt,cls) { var e=document.getElementById(id); if(!e) return; e.textContent=txt; e.className='bv'+(cls?' '+cls:''); }
+
+// ═══════════════════════════════════════════
+// GRADE STRIP BUILDER — for report table
+// builds a connected 4-cell strip, highlights patient's grade cell
+// gradeIdx: 0=normal,1=mild,2=moderate,3=severe  labels/refs = arrays of 4
+// ═══════════════════════════════════════════
+function gradeStrip(gradeIdx, labels) {
+  var cls = ['gs-n','gs-m','gs-o','gs-s'];
+  return '<div class="gs">' + labels.map(function(lbl,i) {
+    var dim = (gradeIdx>=0 && i!==gradeIdx) ? ' dim' : '';
+    return '<div class="gs-cell '+cls[i]+dim+'">'+lbl+'</div>';
+  }).join('') + '</div>';
+}
+
+// Grade index from grade string
+function gIdx(g) {
+  if(!g) return -1;
+  var l=g.toLowerCase();
+  if(l==='normal'||l==='low'||l.indexOf('none')>=0) return 0;
+  if(l.indexOf('mild')>=0||l.indexOf('borderline')>=0||l.indexOf('borderline')>=0) return 1;
+  if(l.indexOf('moderate')>=0) return 2;
+  if(l.indexOf('severe')>=0||l.indexOf('impaired')>=0) return 3;
+  return -1;
+}
+
+// Value cell CSS class
+function valCls(gradeIdx) {
+  if(gradeIdx<0) return 'vok';
+  return ['vn','vm','vo','vs'][gradeIdx]||'vok';
+}
+
+// ═══════════════════════════════════════════
+// REF STRIPS — input tabs (sex/age dynamic)
+// ═══════════════════════════════════════════
+function updateRefStrips() {
+  var m=TS.sex==='M', age=TS.age||50;
+  set4('rf-LVIDd', m?'37–56':'35–51', m?'57–61':'52–55', m?'62–65':'56–59', m?'≥66':'≥60');
+  set4('rf-IVSd','6–12','13–15','16–19','≥20');
+  set4('rf-LVPWd','6–12','13–15','16–19','≥20');
+  set4('rf-LVIDs', m?'22–41':'20–37', m?'42–45':'38–42', m?'46–50':'43–46', m?'≥51':'≥47');
+  set4('rf-LVEDV4C', m?'67–155':'56–104', m?'156–178':'105–117', m?'179–201':'118–130', m?'≥202':'≥131');
+  set4('rf-LVESV4C', m?'22–58':'19–49', m?'59–70':'50–59', m?'71–82':'60–69', m?'≥83':'≥70');
+  set4('rf-RVbase', m?'25–41':'24–38', m?'42–46':'39–44', m?'47–50':'45–48', m?'≥51':'≥49');
+  // LV Mass indexed
+  set4('rf-LVMassI', m?'40–115':'33–95', m?'116–131':'96–108', m?'132–148':'109–121', m?'≥149':'≥122');
+  // Age-indexed e'
+  var sepN,latN,ageLabel;
+  if(age<=40){sepN=m?'≥7':'≥8';latN=m?'≥9':'≥11';ageLabel='18–40y';}
+  else if(age<=65){sepN='≥5';latN='≥6';ageLabel='41–65y';}
+  else{sepN='≥4';latN='≥5';ageLabel='>65y';}
+  set2c('rf-sepE','rn','Normal: '+sepN+' ('+ageLabel+')','rs2','Impaired if below');
+  set2c('rf-latE','rn','Normal: '+latN+' ('+ageLabel+')','rs2','Impaired if below');
+}
+function set4(id,n,mi,mo,s) {
+  var e=document.getElementById(id); if(!e) return;
+  e.innerHTML='<div class="rc rn">Normal: '+n+'</div><div class="rc rm">Mild: '+mi+'</div><div class="rc ro">Mod: '+mo+'</div><div class="rc rs2">Severe: '+s+'</div>';
+}
+function set2c(id,c1,t1,c2,t2) {
+  var e=document.getElementById(id); if(!e) return;
+  e.className='rs c2';
+  e.innerHTML='<div class="rc '+c1+'">'+t1+'</div><div class="rc '+c2+'">'+t2+'</div>';
+}
+
+// ═══════════════════════════════════════════
+// CALCULATIONS
+// ═══════════════════════════════════════════
+function calcAge() {
+  var dob=new Date(document.getElementById('ptDOB').value);
+  if(!isNaN(dob)){var age=Math.floor((Date.now()-dob)/(1000*60*60*24*365.25));setFC('calcAge',age+' yrs');TS.age=age;updateRefStrips();}
+}
+function calcBSA() {
+  var h=num('ptHeight'),w=num('ptWeight');
+  if(h&&w){setFC('calcBSA',Math.sqrt(h*w/3600).toFixed(2)+' m²');setFC('calcBMI',(w/Math.pow(h/100,2)).toFixed(1));}
+  calcHaemo(); gradeLAVol(); gradeAorta();
+}
+function calcMAP() { var s=num('sbp'),d=num('dbp'); if(s&&d) setFC('calcMAP',((s+2*d)/3).toFixed(0)+' mmHg'); }
+function updateStrip() {
+  var sn=document.getElementById('ptSurname').value,fn=document.getElementById('ptFirst').value,id=document.getElementById('ptID').value;
+  document.getElementById('ptstrip').innerHTML=(sn||fn||id)?
+    '<span class="ptb on">'+(sn?sn.toUpperCase()+', ':'')+fn+'</span><span class="ptb">'+(id||'No ID')+'</span>':
+    '<span class="ptb">No patient loaded</span>';
+  markDone('patient');
+}
+
+function gradeWall(val) { if(!val)return''; if(val<=12)return'Normal'; if(val<=15)return'Mild'; if(val<=19)return'Moderate'; return'Severe'; }
+function gradeLinear(val,ranges) {
+  if(!val)return'';
+  var n=ranges[0],mi=ranges[1],mo=ranges[2];
+  if(val>=n[0]&&val<=n[1])return'Normal';
+  if(val>=mi[0]&&val<=mi[1])return'Mild';
+  if(val>=mo[0]&&val<=mo[1])return'Moderate';
+  if(val>mo[1])return'Severe';
+  return val<n[0]?'Low':'Normal';
+}
+function g2fi(grade) {
+  if(!grade)return''; var l=grade.toLowerCase();
+  if(l==='normal')return'gn'; if(l==='low')return'rd';
+  if(l==='mild')return'am'; if(l==='moderate')return'or';
+  if(l.indexOf('severe')>=0||l.indexOf('impaired')>=0)return'rd';
+  return'';
+}
+
+function gradeLV() {
+  var m=TS.sex==='M';
+  var LVIDd=num('LVIDd'),IVSd=num('IVSd'),LVPWd=num('LVPWd'),LVIDs=num('LVIDs');
+  if(LVIDd){var lr=m?[[37,56],[57,61],[62,65]]:[[35,51],[52,55],[56,59]];fiG('LVIDd',g2fi(gradeLinear(LVIDd,lr)));}
+  if(IVSd) fiG('IVSd',g2fi(gradeWall(IVSd)));
+  if(LVPWd) fiG('LVPWd',g2fi(gradeWall(LVPWd)));
+  if(LVIDd&&LVIDs){setFC('calcFS',((LVIDd-LVIDs)/LVIDd*100).toFixed(1)+'%');var lsr=m?[[22,41],[42,45],[46,50]]:[[20,37],[38,42],[43,46]];fiG('LVIDs',g2fi(gradeLinear(LVIDs,lsr)));}
+  if(IVSd&&LVPWd&&LVIDd){
+    var rwt=2*LVPWd/LVIDd; setFC('calcRWT',rwt.toFixed(2));
+    var wallAbnorm=IVSd>12||LVPWd>12;
+    var geom='Normal geometry';
+    if(rwt>0.42&&wallAbnorm) geom='Concentric hypertrophy';
+    else if(rwt>0.42&&!wallAbnorm) geom='Concentric remodelling';
+    else if(rwt<=0.42&&wallAbnorm) geom='Eccentric hypertrophy';
+    setFC('calcGeom',geom);
+    var d2=LVIDd/10,is2=IVSd/10,pw2=LVPWd/10;
+    var mass=0.8*(1.04*(Math.pow(d2+is2+pw2,3)-Math.pow(d2,3)))+0.6;
+    var bsa=getBSA();
+    if(bsa){var mi2=(mass/bsa).toFixed(0);var lim=m?115:95;setFC('calcLVMassI',mi2+' g/m²'+(parseFloat(mi2)>lim?' (elevated)':''));}
+  }
+  markDone('plax');
+}
+
+function gradeRV() {
+  var m=TS.sex==='M';
+  var rvb=num('RVbase'),tapse=num('TAPSE'),rvs=num('RVs'),rveda=num('RVEDA'),rvesa=num('RVESA');
+  if(rvb){var rr=m?[[25,41],[42,46],[47,50]]:[[24,38],[39,44],[45,48]];fiG('RVbase',g2fi(gradeLinear(rvb,rr)));}
+  if(tapse){fiG('TAPSE',tapse>=17?'gn':tapse>=14?'am':'rd');banner('b-tapse',tapse.toFixed(0)+'mm',tapse>=17?'ok':tapse>=14?'warn':'bad');}
+  if(rvs) fiG('RVs',rvs>=10?'gn':'rd');
+  if(rveda&&rvesa){var fac=(rveda-rvesa)/rveda*100;var fg2=fac>=35?'Normal':fac>=25?'Mild':fac>=15?'Moderate':'Severe';setFC('calcRVFAC',fac.toFixed(1)+'% — '+fg2);fiG('RVEDA',g2fi(fg2));}
+  var lvb=num('LVIDd'); if(rvb&&lvb) setFC('calcRVLV',(rvb/lvb).toFixed(2)+(rvb/lvb>=1?' (RV dilatation)':''));
+  markDone('apical');
+}
+
+function gradeAorta() {
+  var sov=num('SoV'),ascao=num('AscAo'),txt='—';
+  if(sov){txt=sov>40?'Aortic root dilatation (SoV '+sov+'mm)':'Normal aortic root';fiG('SoV',sov>40?'or':'gn');}
+  if(ascao){if(ascao>40)txt+=(txt!=='—'?'; ':'')+'Ascending aorta dilatation ('+ascao+'mm)';fiG('AscAo',ascao>40?'or':'gn');}
+  setFC('calcAorta',txt);
+}
+
+function calcFAC() {
+  var eda=num('LVEDA'),esa=num('LVESA');
+  if(eda&&esa){
+    var fac=(eda-esa)/eda*100;
+    var fg2=fac>=35?'Normal (≥35%)':fac>=25?'Mildly reduced':fac>=15?'Moderately reduced':'Severely reduced';
+    setFC('calcFAC_val',fac.toFixed(1)+'% — '+fg2);
+    var bsa=getBSA(); if(bsa) setFC('calcLVEDAi',(eda/bsa).toFixed(1)+' cm²/m²');
+    fiG('LVEDA',g2fi(fac>=35?'Normal':fac>=25?'Mild':fac>=15?'Moderate':'Severe'));
+    markDone('psax');
+  }
+}
+
+function calcEF() {
+  var meth=TS.volMethod,e4=num('LVEDV4C'),s4=num('LVESV4C'),e2=num('LVEDV2C'),s2=num('LVESV2C');
+  var edv=0,esv=0;
+  if(meth==='Biplane'&&e4&&s4&&e2&&s2){edv=(e4+e2)/2;esv=(s4+s2)/2;}
+  else if(e4&&s4){edv=e4;esv=s4;}
+  if(edv&&esv){
+    var ef=(edv-esv)/edv*100;
+    setFC('calcEF',ef.toFixed(1)+'%');
+    setFC('calcLVEDV',edv.toFixed(0)+' ml');
+    setFC('calcLVESV',esv.toFixed(0)+' ml');
+    var grade=ef>=55?'Normal':ef>=50?'Borderline Low':ef>=35?'Impaired':'Severely Impaired';
+    setFC('calcEF_grade',grade);
+    fiG('LVEDV4C',ef>=55?'gn':ef>=50?'am':ef>=35?'or':'rd');
+    var bsa=getBSA(); if(bsa) setFC('calcVolI',(edv/bsa).toFixed(0)+' / '+(esv/bsa).toFixed(0)+' ml/m²');
+    banner('b-ef',ef.toFixed(0)+'%',ef>=55?'ok':ef>=50?'warn':'bad');
+    calcHaemo(); markDone('apical');
+  }
+}
+
+function calcHaemo() {
+  var lvotd=num('LVOTd')/10,vti=num('LVOTVTI'),hr=num('heartRate');
+  var sbp=num('sbp'),dbp=num('dbp'),bsa=getBSA(),cvp=num('cvp')||8;
+  if(lvotd&&vti){
+    var csa=Math.PI*Math.pow(lvotd/2,2),sv=csa*vti;
+    setFC('calcSV',sv.toFixed(0)+' ml');
+    fiG('LVOTVTI',sv>=60&&sv<=100?'gn':sv<60?'rd':'gn');
+    if(hr){
+      var co=sv*hr/1000;
+      setFC('calcCO',co.toFixed(2)+' L/min');
+      banner('b-co',co.toFixed(1)+' L',co>=4&&co<=8?'ok':co<3.5?'bad':'warn');
+      if(bsa){
+        var ci=co/bsa;
+        setFC('calcCI',ci.toFixed(2)+' L/min/m²');
+        banner('b-ci',ci.toFixed(1),ci>=2.2?'ok':ci<1.8?'bad':'warn');
+        var map=sbp&&dbp?(sbp+2*dbp)/3:0;
+        if(map&&co>0) setFC('calcSVRI',((map-cvp)*80/(co/bsa)).toFixed(0)+' dyn·s·cm⁻⁵·m²');
+      }
+    }
+  }
+  calcAV(); calcShock();
+}
+
+function calcDiastolic() {
+  var E=num('MVE'),A=num('MVA'),latE=num('latE'),sepE=num('sepE');
+  var age=TS.age||50,sex=TS.sex;
+  var ef=parseFloat((document.getElementById('calcEF')||{}).textContent)||0;
+  if(E&&A) setFC('calcEA',(E/A).toFixed(2));
+  var sepThresh,latThresh;
+  if(age>65){sepThresh=4;latThresh=5;}
+  else if(age>40){sepThresh=5;latThresh=6;}
+  else{sepThresh=sex==='M'?7:8;latThresh=sex==='M'?9:11;}
+  if(sepE) fiG('sepE',sepE<sepThresh?'rd':'gn');
+  if(latE) fiG('latE',latE<latThresh?'rd':'gn');
+  var meanE=0;
+  if(latE&&sepE) meanE=(latE+sepE)/2; else if(latE) meanE=latE; else if(sepE) meanE=sepE;
+  if(meanE) setFC('calcMeanE',meanE.toFixed(1)+' cm/s');
+  var eeRatio=0;
+  if(E&&meanE){
+    eeRatio=E/meanE;
+    setFC('calcEeRatio',eeRatio.toFixed(1));
+    banner('b-ee',eeRatio.toFixed(1),eeRatio<8?'ok':eeRatio<=14?'warn':'bad');
+    fiG('MVE',eeRatio<8?'gn':eeRatio<=14?'am':'rd');
+  }
+  var laviEl=document.getElementById('calcLAVi'),lavi=laviEl?parseFloat(laviEl.textContent)||0:0;
+  var trv=num('TRVmax');
+  var sepImp=sepE&&sepE<sepThresh,latImp=latE&&latE<latThresh;
+  var laviElev=lavi>38,eeElev=eeRatio>14,trElev=trv>2.8;
+  var grade='Insufficient data for grading';
+  if(ef>=55||ef===0){
+    var pos=0;
+    if(sepImp||latImp)pos++; if(laviElev)pos++; if(eeElev)pos++; if(trElev)pos++;
+    if(pos===0&&(sepE||latE)) grade='Normal diastolic function for age';
+    else if(pos>=3) grade='Impaired diastolic function with elevated filling pressures';
+    else if(pos===1) grade='Impaired diastolic function with normal filling pressures';
+    else if(pos===2) grade='Impaired diastolic function with indeterminate filling pressures';
+  } else {
+    if(eeRatio&&trv){
+      if(eeRatio<14&&trv<=2.8) grade='Impaired diastolic function with normal filling pressures';
+      else if(eeRatio>=14||trv>2.8) grade='Impaired diastolic function with elevated filling pressures';
+      else grade='Impaired diastolic function with indeterminate filling pressures';
+    } else if(eeRatio||trv) grade='Impaired diastolic function — insufficient variables for full grading';
+  }
+  if(TS.rhythm==='Atrial fibrillation') grade=grade.replace('Normal diastolic function','Diastolic assessment indeterminate (atrial fibrillation)');
+  setFC('calcDiastGrade',grade);
+  markDone('doppler'); calcShock();
+}
+
+function calcPASP() {
+  var trv=num('TRVmax'),cvp=num('cvp')||8,pat=num('PAT');
+  if(trv){
+    var pasp=4*trv*trv+cvp;
+    setFC('calcPASP',pasp.toFixed(0)+' mmHg');
+    var interp=pasp<=35?'Normal':pasp<=50?'Mild pulmonary hypertension (36–50 mmHg)':pasp<=70?'Moderate pulmonary hypertension (51–70 mmHg)':'Severe pulmonary hypertension (>70 mmHg)';
+    setFC('calcPASP_interp',interp);
+    banner('b-pasp',pasp.toFixed(0),pasp<=35?'ok':pasp<=50?'warn':'bad');
+    fiG('TRVmax',pasp<=35?'gn':pasp<=50?'am':pasp<=70?'or':'rd');
+    calcDiastolic(); calcShock();
+  }
+  if(pat) fiG('PAT',pat>=100?'gn':pat>=70?'am':'rd');
+}
+
+function calcAV() {
+  var avVmax=num('AVVmax'),avMPG=num('AVMeanPG'),avVTI=num('AVVTI');
+  var lvotd=num('LVOTd')/10,lvotVTI=num('LVOTVTI'),bsa=getBSA();
+  if(avVmax) fiG('AVVmax',avVmax<2.5?'gn':avVmax<3?'am':avVmax<4?'or':'rd');
+  if(avMPG) fiG('AVMeanPG',avMPG<20?'gn':avMPG<40?'am':avMPG<60?'or':'rd');
+  if(lvotd&&lvotVTI&&avVTI){
+    var csa=Math.PI*Math.pow(lvotd/2,2),ava=(csa*lvotVTI/avVTI).toFixed(2),di=(lvotVTI/avVTI).toFixed(2);
+    setFC('calcAVA',ava+' cm²');
+    if(bsa) setFC('calcAVAi',(ava/bsa).toFixed(2)+' cm²/m²  |  DI: '+di);
+  }
+}
+function calcMR() {
+  var pr=num('MRPISA');
+  if(pr){var eroa=(2*Math.PI*pr*pr*40/500).toFixed(2);var g=parseFloat(eroa)<0.2?'Mild':parseFloat(eroa)<0.4?'Moderate':'Severe';setFC('calcMREROA',eroa+' cm² ('+g+')');}
+}
+function calcMVA() {
+  var pht=num('MVPHT');
+  if(pht){var mva=(220/pht).toFixed(2);setFC('calcMVA_val',mva+' cm² — '+(parseFloat(mva)>1.5?'Mild/None':parseFloat(mva)>=1?'Moderate':'Severe'));}
+}
+function gradeLAVol() {
+  var vol=num('LAVol'),bsa=getBSA();
+  if(vol&&bsa){var lavi=vol/bsa;setFC('calcLAVi',lavi.toFixed(0)+' ml/m²');fiG('LAVol',lavi<34?'gn':lavi<=38?'am':lavi<=48?'or':'rd');calcDiastolic();}
+}
+function calcIVC() {
+  var mx=num('IVCmax'),mn=num('IVCmin'),resp=TS.ivcResp,vent=TS.ventilation;
+  if(mx&&mn){setFC('calcIVCCI',((mx-mn)/mx*100).toFixed(0)+'%');}
+  banner('b-ivc',mx?mx.toFixed(0)+'mm':'—',mx&&mx<21?'ok':mx&&mx<=25?'warn':mx?'bad':'');
+  var rap='8 mmHg (estimated)';
+  if(mx){
+    if(mx<21&&resp.indexOf('>50')>=0) rap='3 mmHg (low)';
+    else if(mx>21&&(resp.indexOf('≤20')>=0||resp.indexOf('Not assessed')>=0)) rap='15 mmHg (elevated)';
+    else if(mx<=21) rap='8 mmHg (indeterminate)';
+    else rap='15 mmHg (plethoric IVC)';
+  }
+  setFC('calcRAP',rap);
+  banner('b-rap',rap.split(' ')[0],rap.indexOf('3')===0?'ok':rap.indexOf('15')===0?'bad':'warn');
+  var fluid='—';
+  if(vent==='CMV'||vent==='Pressure Support'){
+    fluid=(resp.indexOf('>50')>=0||resp.indexOf('Distension')>=0)?'Dynamic index present — interpret with caution on positive pressure ventilation':'No dynamic preload responsiveness marker on positive pressure ventilation';
+  } else {
+    if(resp.indexOf('>50')>=0) fluid='IVC collapsibility greater than 50% — consistent with fluid responsiveness in spontaneous breathing';
+    else if(mx&&mx>21) fluid='Plethoric IVC — volume loaded, unlikely to be preload responsive';
+    else fluid='IVC assessment inconclusive for fluid responsiveness';
+  }
+  setFC('calcFluid',fluid);
+  markDone('ivc'); calcShock();
+}
+function calcPLR() {
+  var pre=num('prePLR'),post=num('postPLR');
+  if(pre&&post){var delta=((post-pre)/pre*100).toFixed(1);var resp2=parseFloat(delta)>=10;setFC('calcPLR_val',delta+'% — '+(resp2?'Fluid responsive (≥10%)':'Not responsive (<10%)'));fiG('prePLR',resp2?'gn':'rd');}
+}
+
+// ═══════════════════════════════════════════
+// SHOCK CLASSIFIER
+// ═══════════════════════════════════════════
+function calcShock() {
+  var ef=parseFloat((document.getElementById('calcEF')||{}).textContent)||0;
+  var co=parseFloat((document.getElementById('calcCO')||{}).textContent)||0;
+  var ci=parseFloat((document.getElementById('calcCI')||{}).textContent)||0;
+  var svri=parseFloat((document.getElementById('calcSVRI')||{}).textContent)||0;
+  var pasp=parseFloat((document.getElementById('calcPASP')||{}).textContent)||0;
+  var rvlv=parseFloat((document.getElementById('calcRVLV')||{}).textContent)||0;
+  var tapse=num('TAPSE'),ivcMax=num('IVCmax');
+  if(!co&&!ef) return;
+  var lowCI=ci>0&&ci<2.2,lowSVRI=svri>0&&svri<1760,highSVRI=svri>2600;
+  var lvDysf=ef>0&&ef<55,rvDysf=(tapse>0&&tapse<17)||rvlv>=1;
+  var tampon=TS.pericEff.indexOf('Moderate')>=0||TS.pericEff.indexOf('Large')>=0;
+  var elevPASP=pasp>35;
+  var pattern,evidence,color;
+  if(tampon||MT.tamp_rv||MT.tamp_ra){
+    pattern='Obstructive — Suspected Tamponade';
+    evidence=['Significant pericardial effusion ('+TS.pericEff+')','Raised venous pressure: '+((document.getElementById('calcRAP')||{}).textContent||'—'),'Assess for chamber collapse and mitral valve respiratory variation'];
+    color='var(--rd)';
+  } else if(rvDysf&&elevPASP&&lowCI){
+    pattern='Obstructive / Right Heart Failure — Cor Pulmonale Pattern';
+    evidence=['RV dysfunction (TAPSE '+(tapse||'—')+'mm, RV/LV ratio '+rvlv.toFixed(2)+')','Elevated PASP '+pasp.toFixed(0)+' mmHg','Low cardiac index '+ci.toFixed(2)+' L/min/m²','Differential includes massive pulmonary embolism and decompensated right heart failure'];
+    color='var(--or)';
+  } else if(lvDysf&&lowCI&&highSVRI){
+    pattern='Cardiogenic Shock — LV Failure Pattern';
+    evidence=['LVEF '+ef.toFixed(0)+'% (impaired)','Low cardiac index '+ci.toFixed(2)+' L/min/m²','Elevated SVRI '+svri.toFixed(0)+' — compensatory vasoconstriction','Diastolic assessment: '+((document.getElementById('calcDiastGrade')||{}).textContent||'—')];
+    color='var(--rd)';
+  } else if(lowCI&&lowSVRI){
+    pattern='Distributive Shock — Low SVR Pattern';
+    evidence=['Low cardiac index '+ci.toFixed(2)+' L/min/m²','Low SVRI '+svri.toFixed(0)+' dyn·s·cm⁻⁵·m²','Preserved or hyperdynamic LV function (EF '+ef.toFixed(0)+'%)','Differential includes sepsis, anaphylaxis, hepatic failure, and neurogenic shock'];
+    color='var(--am)';
+  } else if(lowCI&&!lvDysf){
+    pattern='Hypovolaemic / Preload Dependent Pattern';
+    evidence=['Low cardiac index with preserved LV systolic function','IVC max diameter: '+(ivcMax||'—')+' mm','Volume status: '+((document.getElementById('calcFluid')||{}).textContent||'—'),'Consider passive leg raise or fluid challenge with VTI reassessment'];
+    color='var(--am)';
+  } else if(ef>=55&&ci>=2.2){
+    pattern='No haemodynamic shock pattern identified on current data';
+    evidence=['LVEF '+ef.toFixed(0)+'% (preserved)','Cardiac index '+ci.toFixed(2)+' L/min/m² (adequate)'];
+    color='var(--gn)';
+  } else return;
+  var box=document.getElementById('shockDiv');
+  if(box){box.innerHTML='<div class="shockbox"><div class="shpat" style="color:'+color+'">Haemodynamic Pattern: '+pattern+'</div><div class="shev">'+evidence.map(function(e){return'• '+e;}).join('<br>')+'</div></div>';}
+}
+
+// ═══════════════════════════════════════════
+// STORAGE
+// ═══════════════════════════════════════════
+var FIELDS=['ptSurname','ptFirst','ptID','ptDOB','ptLocation','ptHeight','ptWeight',
+  'heartRate','imageQuality','sbp','dbp','cvp','peep','fio2','cvsSupport','indication','history',
+  'studyDate','studyTime','LVIDd','IVSd','LVPWd','LVIDs','LVOTd','AVann','SoV','STJ','AscAo',
+  'LAd','RVOT_PLAX','LVEDA','LVESA','PAVmax','PAT','LVEDV4C','LVESV4C','LVEDV2C','LVESV2C',
+  'RVbase','RVmid','RVlength','TAPSE','RVs','RVEDA','RVESA','RVwall','MAPSE','LAVol',
+  'LVOTVTI','LVOTVmax','MVE','MVA','MVDecTime','latE','latA','latS','sepE','sepA','sepS',
+  'TRVmax','AVVmax','AVMeanPG','AVVTI','ARVC','ARPHT','MRVC','MRPISA','MVMeanPG','MVPHT',
+  'TRVC','IVCmax','IVCmin','additionalFindings','rwmaText','prePLR','postPLR'];
+
+function getStudyData() {
+  var data={ts:{},mt:{},sev:{}};
+  Object.assign(data.ts,TS); Object.assign(data.mt,MT); Object.assign(data.sev,SEV);
+  FIELDS.forEach(function(id){var e=document.getElementById(id);if(e)data[id]=e.value;});
+  data._computed={ef:(document.getElementById('calcEF')||{}).textContent,tapse:num('TAPSE'),co:(document.getElementById('calcCO')||{}).textContent,ci:(document.getElementById('calcCI')||{}).textContent,pasp:(document.getElementById('calcPASP')||{}).textContent};
+  return data;
+}
+function loadStudyData(data) {
+  if(data.ts)Object.assign(TS,data.ts); if(data.mt)Object.assign(MT,data.mt); if(data.sev)Object.assign(SEV,data.sev);
+  FIELDS.forEach(function(id){var e=document.getElementById(id);if(e&&data[id]!==undefined)e.value=data[id];});
+  restoreAllToggles(); restoreAllSeverities(); setSex(TS.sex||'M');
+  calcAge();calcBSA();calcMAP();gradeLV();gradeRV();calcFAC();calcEF();calcHaemo();calcDiastolic();calcPASP();calcAV();calcMVA();calcIVC();gradeLAVol();gradeAorta();updateStrip();updateRefStrips();
+}
+function restoreAllToggles() {
+  var keys=['rhythm','ventilation','wallMotion','dSign','volMethod','pvFlow','pericEff','pericThick','pleuralL','pleuralR','avMorph','mrMech','ivcResp'];
+  keys.forEach(function(key){
+    var val=TS[key]; if(!val)return;
+    var grp=document.getElementById('tg-'+key); if(!grp)return;
+    grp.querySelectorAll('.tb').forEach(function(btn){
+      var oc=btn.getAttribute('onclick')||'';
+      if(oc.indexOf("'"+val+"'")>=0){btn.className='tb on';if(['Sinus rhythm','Spontaneous','Normal','None','Trileaflet','Not assessed','None L','None R'].indexOf(val)>=0)btn.classList.add('gn');}
+    });
+  });
+  Object.keys(MT).forEach(function(k){if(MT[k])document.querySelectorAll('[onclick*="\''+k+'\'"]').forEach(function(b){b.classList.add('on');});});
+  if(TS.pericEff&&(TS.pericEff.indexOf('Moderate')>=0||TS.pericEff.indexOf('Large')>=0))document.getElementById('tampBox').style.display='block';
+  if(TS.wallMotion&&TS.wallMotion.indexOf('Regional')>=0)document.getElementById('rwmaDetail').style.display='block';
+}
+function restoreAllSeverities() {
+  ['AS','AR','MR','MS','TR','PR'].forEach(function(valve){
+    var lvl=SEV[valve]; if(lvl===undefined)return;
+    var row=document.getElementById('sv-'+valve); if(!row)return;
+    row.querySelectorAll('.sb').forEach(function(b){b.className='sb';});
+    var btn=row.querySelectorAll('.sb')[lvl]; if(btn)btn.classList.add('a'+lvl);
+  });
+}
+function saveStudy() {
+  var data=getStudyData(),id=data.ptID||('noid_'+Date.now());
+  var studies=JSON.parse(localStorage.getItem('cce_studies')||'{}');
+  if(!studies[id])studies[id]={sessions:[]};
+  studies[id].name=(data.ptSurname||'')+(data.ptSurname&&data.ptFirst?', ':'')+(data.ptFirst||'');
+  studies[id].dob=data.ptDOB||''; studies[id].lastDate=data.studyDate||'';
+  studies[id].sessions.unshift({date:data.studyDate,time:data.studyTime,data:data});
+  if(studies[id].sessions.length>10)studies[id].sessions.length=10;
+  localStorage.setItem('cce_studies',JSON.stringify(studies));
+  showToast('Study saved');
+}
+function loadPatientList() {
+  var studies=JSON.parse(localStorage.getItem('cce_studies')||'{}');
+  var list=document.getElementById('ptList'),keys=Object.keys(studies);
+  if(!keys.length){list.innerHTML='<div style="color:var(--tx3);font-size:11px;padding:8px">No saved studies yet</div>';return;}
+  list.innerHTML=keys.map(function(id){var s=studies[id];return'<div class="pti" onclick="loadPatient(\''+id+'\')"><div><div class="ptn">'+(s.name||id)+'</div><div class="ptm">ID: '+id+' · DOB: '+(s.dob||'—')+' · Last: '+(s.lastDate||'—')+' · '+(s.sessions?s.sessions.length:0)+' session(s)</div></div><div style="color:var(--acc2);font-size:11px">Load</div></div>';}).join('');
+}
+function searchPatients(q) {
+  if(!q){loadPatientList();return;}
+  var studies=JSON.parse(localStorage.getItem('cce_studies')||'{}');
+  var list=document.getElementById('ptList');
+  var matches=Object.entries(studies).filter(function(e){return e[0].toLowerCase().indexOf(q.toLowerCase())>=0||(e[1].name||'').toLowerCase().indexOf(q.toLowerCase())>=0;});
+  if(!matches.length){list.innerHTML='<div style="color:var(--tx3);font-size:11px;padding:8px">No matches found</div>';return;}
+  list.innerHTML=matches.map(function(e){var id=e[0],s=e[1];return'<div class="pti" onclick="loadPatient(\''+id+'\')"><div><div class="ptn">'+(s.name||id)+'</div><div class="ptm">ID: '+id+' · '+(s.sessions?s.sessions.length:0)+' session(s) · Last: '+(s.lastDate||'—')+'</div></div><div style="color:var(--acc2);font-size:11px">Load</div></div>';}).join('');
+}
+function loadPatient(id) {
+  var studies=JSON.parse(localStorage.getItem('cce_studies')||'{}');
+  if(studies[id]&&studies[id].sessions&&studies[id].sessions.length>0){loadStudyData(studies[id].sessions[0].data);showToast('Loaded: '+studies[id].name);showTab('patient');}
+}
+function newStudy() {
+  if(!confirm('Start new study? Unsaved data will be lost.'))return;
+  FIELDS.forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});
+  var n=new Date();document.getElementById('studyDate').value=n.toISOString().slice(0,10);document.getElementById('studyTime').value=n.toTimeString().slice(0,5);
+  document.getElementById('ptstrip').innerHTML='<span class="ptb">New study</span>';
+  document.getElementById('rptCont').style.display='none';document.getElementById('rptph').style.display='block';
+  showTab('patient');
+}
+function exportJSON() {
+  var data=getStudyData(),json=JSON.stringify(data,null,2);
+  var blob=new Blob([json],{type:'application/json'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  var name=(data.ptSurname||'POCUS')+'_'+(data.ptID||'export')+'_'+(data.studyDate||new Date().toISOString().slice(0,10))+'.json';
+  a.download=name;a.click();showToast('Exported: '+name);
+}
+function importJSON() {
+  var input=document.createElement('input');input.type='file';input.accept='.json';
+  input.onchange=function(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){try{var d=JSON.parse(ev.target.result);loadStudyData(d);showToast('Study imported');}catch(ex){showToast('Invalid file format');}};r.readAsText(f);};
+  input.click();
+}
+
+// ═══════════════════════════════════════════
+// GOOGLE DRIVE
+// ═══════════════════════════════════════════
+function setupDrive() {
+  var cid=prompt('Enter your Google OAuth Client ID\n(from console.cloud.google.com > APIs & Services > Credentials)\n\nLeave blank to use Export/Import mode instead:');
+  if(!cid){showToast('Using local storage and export/import mode');return;}
+  var scope=encodeURIComponent('https://www.googleapis.com/auth/drive.appdata');
+  var redirect=encodeURIComponent(window.location.href.split('?')[0].split('#')[0]);
+  var authURL='https://accounts.google.com/o/oauth2/v2/auth?client_id='+cid+'&redirect_uri='+redirect+'&response_type=token&scope='+scope;
+  window.open(authURL,'_blank');
+  showToast('Authenticate in new window, then paste token below',4000);
+  setTimeout(function(){var tok=prompt('Paste the access_token from the redirected URL (after #access_token=):');if(tok){driveToken=tok.trim();document.getElementById('drvDot').className='drvdot ok';document.getElementById('drvLbl').textContent='Google Drive connected — ';showToast('Google Drive connected');}},3000);
+}
+async function saveToDrive() {
+  if(!driveToken){showToast('Connect Google Drive first via Patient tab');return;}
+  var data=getStudyData(),json=JSON.stringify(data);
+  var id=data.ptID||'noid',date=data.studyDate||new Date().toISOString().slice(0,10);
+  var filename='POCUS_'+id+'_'+date+'.json';
+  try{
+    var meta={name:filename,parents:['appDataFolder']};
+    var form=new FormData();
+    form.append('metadata',new Blob([JSON.stringify(meta)],{type:'application/json'}));
+    form.append('file',new Blob([json],{type:'application/json'}));
+    var r=await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart',{method:'POST',headers:{Authorization:'Bearer '+driveToken},body:form});
+    if(r.ok)showToast('Saved to Google Drive: '+filename);
+    else showToast('Drive save failed — re-authenticate');
+  }catch(e){showToast('Drive error: '+e.message);}
+}
+async function loadFromDrive() {
+  if(!driveToken){showToast('Connect Google Drive first');return;}
+  try{
+    var r=await fetch('https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&fields=files(id,name,modifiedTime)&orderBy=modifiedTime%20desc',{headers:{Authorization:'Bearer '+driveToken}});
+    var d=await r.json();
+    if(!d.files||!d.files.length){showToast('No studies found in Drive');return;}
+    var names=d.files.slice(0,5).map(function(f,i){return(i+1)+'. '+f.name;}).join('\n');
+    var choice=parseInt(prompt('Select study to load:\n'+names))-1;
+    if(isNaN(choice)||choice<0)return;
+    var file=d.files[choice];
+    var fr=await fetch('https://www.googleapis.com/drive/v3/files/'+file.id+'?alt=media',{headers:{Authorization:'Bearer '+driveToken}});
+    var study=await fr.json();
+    loadStudyData(study);showToast('Loaded from Drive: '+file.name);
+  }catch(e){showToast('Drive load error: '+e.message);}
+}
+
+// ═══════════════════════════════════════════
+// REPORT
+// ═══════════════════════════════════════════
+function generateReport() {
+  showTab('report');
+  var d=getStudyData(),bsa=getBSA(),sex=TS.sex==='M';
+  function gv(id){return((document.getElementById(id)||{}).textContent||'—');}
+  var ef=parseFloat(gv('calcEF'))||0,efGrade=gv('calcEF_grade'),diastGrade=gv('calcDiastGrade');
+  var sv=gv('calcSV'),co=gv('calcCO'),ci=gv('calcCI'),svri=gv('calcSVRI');
+  var pasp=gv('calcPASP'),paspInterp=gv('calcPASP_interp'),rap=gv('calcRAP');
+  var ava=gv('calcAVA'),avaI=gv('calcAVAi'),eeRatio=gv('calcEeRatio'),lavi=gv('calcLAVi');
+  var rvlv=gv('calcRVLV'),rvfac=gv('calcRVFAC'),facval=gv('calcFAC_val');
+  var geom=gv('calcGeom'),rwt=gv('calcRWT'),mvaVal=gv('calcMVA_val'),eroa=gv('calcMREROA');
+  var plrVal=gv('calcPLR_val'),ivcCI=gv('calcIVCCI'),mapVal=gv('calcMAP'),fluid=gv('calcFluid');
+  var meanE=gv('calcMeanE'),edv=gv('calcLVEDV'),esv=gv('calcLVESV'),volI=gv('calcVolI');
+  var sn=(d.ptSurname||'').toUpperCase(),fn=d.ptFirst||'',pid=d.ptID||'—',ageText=gv('calcAge');
+
+  // HEADER
+  document.getElementById('rptHdr').innerHTML=
+    '<div style="font-size:15px;font-weight:700;letter-spacing:-.3px;margin-bottom:10px">POCUS: Emergency and Critical Care — Echocardiography Report</div>'+
+    '<div style="font-size:11px;color:var(--tx2);line-height:2.1">'+
+    '<div><strong>Patient:</strong> '+sn+(sn&&fn?', ':'')+fn+' &nbsp;|&nbsp; <strong>ID:</strong> '+pid+' &nbsp;|&nbsp; <strong>DOB / Age:</strong> '+(d.ptDOB||'—')+' ('+ageText+') &nbsp;|&nbsp; <strong>Sex:</strong> '+(TS.sex==='M'?'Male':'Female')+' &nbsp;|&nbsp; <strong>BSA:</strong> '+(bsa?bsa.toFixed(2):'—')+' m²</div>'+
+    '<div><strong>Location:</strong> '+(d.ptLocation||'—')+' &nbsp;|&nbsp; <strong>Date / Time:</strong> '+(d.studyDate||'—')+' '+(d.studyTime||'')+' &nbsp;|&nbsp; <strong>Image Quality:</strong> '+(d.imageQuality||'—')+'</div>'+
+    '<div><strong>HR:</strong> '+(d.heartRate||'—')+' bpm &nbsp;|&nbsp; <strong>Rhythm:</strong> '+TS.rhythm+' &nbsp;|&nbsp; <strong>BP:</strong> '+(d.sbp||'—')+'/'+(d.dbp||'—')+' mmHg (MAP '+mapVal+') &nbsp;|&nbsp; <strong>CVP:</strong> '+(d.cvp||'—')+' mmHg</div>'+
+    '<div><strong>Ventilation:</strong> '+TS.ventilation+(d.peep?' PEEP '+d.peep+' cmH₂O':'')+' &nbsp;|&nbsp; <strong>CVS Support:</strong> '+(d.cvsSupport||'None')+'</div>'+
+    (d.indication?'<div><strong>Indication:</strong> '+d.indication+'</div>':'')+
+    (d.history?'<div><strong>History:</strong> '+d.history+'</div>':'')+
+    '</div>';
+
+  // DELTA
+  var studies=JSON.parse(localStorage.getItem('cce_studies')||'{}');
+  var pid2=d.ptID||'',deltaHTML='';
+  if(pid2&&studies[pid2]&&studies[pid2].sessions&&studies[pid2].sessions.length>1){
+    var prev=studies[pid2].sessions[1],pc=(prev.data&&prev.data._computed)?prev.data._computed:{};
+    var cc={ef:ef?ef.toFixed(1)+'%':'—',tapse:num('TAPSE')?num('TAPSE').toFixed(0)+'mm':'—',co:co,ci:ci,pasp:pasp};
+    var rows2=[['LVEF (%)',pc.ef,cc.ef,'higher'],['TAPSE (mm)',pc.tapse,cc.tapse,'higher'],['CO (L/min)',pc.co,cc.co,'higher'],['CI (L/min/m²)',pc.ci,cc.ci,'higher'],['PASP (mmHg)',pc.pasp,cc.pasp,'lower']];
+    deltaHTML='<div class="dbox"><div class="dtitle">Comparison with previous study ('+(prev.date||'prior')+')</div>';
+    rows2.forEach(function(r){
+      var param=r[0],p=r[1],c2=r[2],better=r[3];
+      var pn=parseFloat(p),cn2=parseFloat(c2),chgHtml='';
+      if(pn&&cn2){var d2=((cn2-pn)/pn*100).toFixed(0);var imp=(better==='higher'&&cn2>pn)||(better==='lower'&&cn2<pn);chgHtml='<span class="dchg '+(imp?'ddn':'dup')+'">'+(cn2>pn?'up':'dn')+' '+Math.abs(d2)+'%</span>';}
+      deltaHTML+='<div class="drow"><span class="dparam">'+param+'</span><div class="dvals"><span class="dprev">'+(p||'—')+'</span><span style="color:var(--tx3)">to</span><span class="dcurr">'+(c2||'—')+'</span>'+chgHtml+'</div></div>';
+    });
+    deltaHTML+='</div>';
+  }
+  document.getElementById('deltaDiv').innerHTML=deltaHTML;
+
+  // TABLE — grade strip helper
+  function rdom(title){return'<tr><td colspan="3" class="rdom">'+title+'</td></tr>';}
+
+  function rrow(param, val, stripGradeIdx, stripLabels) {
+    if(!val||val==='—'||val==='0'||val==='') return '';
+    var vc = valCls(stripGradeIdx);
+    var strip = (stripLabels && stripLabels.length===4) ? gradeStrip(stripGradeIdx, stripLabels) : '';
+    return '<tr><td style="color:var(--tx2);font-size:11px">'+param+'</td>'+
+           '<td><span class="rval '+vc+'">'+val+'</span></td>'+
+           '<td>'+strip+'</td></tr>';
+  }
+
+  // Grade index helpers for report
+  function wallGIdx(val) { if(!val)return -1; var v=parseFloat(val); if(v<=12)return 0; if(v<=15)return 1; if(v<=19)return 2; return 3; }
+  function linGIdx(val,ranges) {
+    if(!val)return -1; var v=parseFloat(val);
+    var n=ranges[0],mi=ranges[1],mo=ranges[2];
+    if(v>=n[0]&&v<=n[1])return 0; if(v>=mi[0]&&v<=mi[1])return 1;
+    if(v>=mo[0]&&v<=mo[1])return 2; if(v>mo[1])return 3; return 0;
+  }
+  function efGIdx(v) { if(!v)return -1; if(v>=55)return 0; if(v>=50)return 1; if(v>=35)return 2; return 3; }
+  function tapseGIdx(v) { if(!v)return -1; if(v>=17)return 0; if(v>=14)return 1; return 3; }
+  function eeGIdx(v) { if(!v)return -1; if(v<8)return 0; if(v<=14)return 1; return 3; }
+  function laviGIdx(v) { if(!v)return -1; if(v<34)return 0; if(v<=38)return 1; if(v<=48)return 2; return 3; }
+  function paspGIdx(v) { if(!v)return -1; if(v<=35)return 0; if(v<=50)return 1; if(v<=70)return 2; return 3; }
+  function avvmaxGIdx(v) { if(!v)return -1; if(v<2.5)return 0; if(v<3)return 1; if(v<4)return 2; return 3; }
+  function avmpgGIdx(v) { if(!v)return -1; if(v<20)return 0; if(v<40)return 1; if(v<60)return 2; return 3; }
+  function avaGIdx(v) { if(!v)return -1; if(v>1.5)return 0; if(v>=1)return 1; if(v>=0.6)return 2; return 3; }
+  function coGIdx(v) { if(!v)return -1; if(v>=4&&v<=8)return 0; if(v>=3.5)return 1; return 3; }
+  function ciGIdx(v) { if(!v)return -1; if(v>=2.2)return 0; if(v>=1.8)return 1; return 3; }
+  function svGIdx(v) { if(!v)return -1; if(v>=60&&v<=100)return 0; if(v>=50)return 1; return 3; }
+  function ivcGIdx(v) { if(!v)return -1; if(v<21)return 0; if(v<=25)return 1; return 3; }
+  function rvbaseGIdx(v) { if(!v)return -1; var m=TS.sex==='M'; if(m){if(v<=41)return 0;if(v<=46)return 1;if(v<=50)return 2;return 3;}else{if(v<=38)return 0;if(v<=44)return 1;if(v<=48)return 2;return 3;} }
+  function facGIdx(v) { if(!v)return -1; if(v>=35)return 0; if(v>=25)return 1; if(v>=15)return 2; return 3; }
+  function mreIdx(v) { if(!v)return -1; if(v<0.2)return 0; if(v<0.4)return 1; return 3; }
+  function patGIdx(v) { if(!v)return -1; if(v>=100)return 0; if(v>=70)return 1; return 3; }
+
+  var lr=sex?[[37,56],[57,61],[62,65]]:[[35,51],[52,55],[56,59]];
+  var lsr=sex?[[22,41],[42,45],[46,50]]:[[20,37],[38,42],[43,46]];
+  var rr=sex?[[25,41],[42,46],[47,50]]:[[24,38],[39,44],[45,48]];
+
+  var tableRows=[
+    rdom('LV SIZE AND SYSTOLIC FUNCTION'),
+    rrow('LVIDd', d.LVIDd?d.LVIDd+' mm':'', linGIdx(d.LVIDd,lr), [sex?'Normal 37–56':'Normal 35–51', sex?'Mild 57–61':'Mild 52–55', sex?'Mod 62–65':'Mod 56–59', sex?'Sev ≥66':'Sev ≥60']),
+    rrow('IVSd', d.IVSd?d.IVSd+' mm':'', wallGIdx(d.IVSd), ['Normal 6–12','Mild 13–15','Moderate 16–19','Severe ≥20']),
+    rrow('LVPWd', d.LVPWd?d.LVPWd+' mm':'', wallGIdx(d.LVPWd), ['Normal 6–12','Mild 13–15','Moderate 16–19','Severe ≥20']),
+    rrow('LVIDs', d.LVIDs?d.LVIDs+' mm':'', linGIdx(d.LVIDs,lsr), [sex?'Normal 22–41':'Normal 20–37', sex?'Mild 42–45':'Mild 38–42', sex?'Mod 46–50':'Mod 43–46', sex?'Sev ≥51':'Sev ≥47']),
+    rrow('FS (Teicholz)', gv('calcFS'), parseFloat(gv('calcFS'))>=25&&parseFloat(gv('calcFS'))<=43?0:parseFloat(gv('calcFS'))>=20?1:parseFloat(gv('calcFS'))>=15?2:3, ['Normal 25–43%','Mild 20–24%','Mod 15–19%','Severe <15%']),
+    rrow('RWT', rwt, parseFloat(rwt)<=0.42?0:1, ['Normal 0.22–0.42','Increased >0.42','-','-']),
+    rrow('LV Geometry', geom, geom==='Normal geometry'?0:geom.indexOf('Remodelling')>=0?1:geom.indexOf('Eccentric')>=0?2:3, ['Normal','Concentric Remodelling','Eccentric Hypertrophy','Concentric Hypertrophy']),
+    rrow('LV Mass indexed', gv('calcLVMassI'), parseFloat(gv('calcLVMassI'))<=(sex?115:95)?0:parseFloat(gv('calcLVMassI'))<=(sex?131:108)?1:parseFloat(gv('calcLVMassI'))<=(sex?148:121)?2:3, [sex?'Normal ≤115':'Normal ≤95', sex?'Mild 116–131':'Mild 96–108', sex?'Mod 132–148':'Mod 109–121', sex?'Sev ≥149':'Sev ≥122']),
+    rrow('LVEDV', edv, -1, null),
+    rrow('LVESV', esv, -1, null),
+    rrow('LVEDVi / LVESVi', volI, -1, null),
+    rrow('LVEF (Simpson\'s)', ef?ef.toFixed(1)+'%':'', efGIdx(ef), ['Normal ≥55%','Borderline 50–54%','Impaired 35–49%','Severely Impaired <35%']),
+    rrow('MAPSE', d.MAPSE?d.MAPSE+' mm':'', num('MAPSE')>=8?0:3, ['Normal ≥8 mm','—','—','Reduced <8 mm']),
+    rrow('LV FAC (PSAX)', facval, facGIdx(parseFloat(facval)), ['Normal ≥35%','Mild 25–34%','Moderate 15–24%','Severe <15%']),
+    rrow('LV wall motion', TS.wallMotion+(d.rwmaText?' — '+d.rwmaText:''), TS.wallMotion==='Normal'?0:TS.wallMotion==='Hyperkinetic'?0:3, ['Normal','—','Regional WMA','Global WMA']),
+    rdom('LV DIASTOLIC FUNCTION (BSE 2024 ALGORITHM)'),
+    rrow('MV E velocity', d.MVE?d.MVE+' cm/s':'', parseFloat(d.MVE)>=50&&parseFloat(d.MVE)<=100?0:1, ['Normal 50–100','Abnormal','—','—']),
+    rrow('MV A velocity', d.MVA?d.MVA+' cm/s':'', -1, null),
+    rrow('E/A ratio', gv('calcEA'), parseFloat(gv('calcEA'))>=0.8&&parseFloat(gv('calcEA'))<=2?0:parseFloat(gv('calcEA'))<0.8?1:3, ['Normal 0.8–2.0','Impaired <0.8','—','Restrictive >2.0']),
+    rrow('Dec Time', d.MVDecTime?d.MVDecTime+' ms':'', parseFloat(d.MVDecTime)>=150&&parseFloat(d.MVDecTime)<=250?0:1, ['Normal 150–250 ms','Abnormal','—','—']),
+    rrow('Lateral e\'', d.latE?d.latE+' cm/s':'', -1, null),
+    rrow('Septal e\'', d.sepE?d.sepE+' cm/s':'', -1, null),
+    rrow('Mean e\'', meanE, -1, null),
+    rrow('E/e\' ratio (mean)', eeRatio, eeGIdx(parseFloat(eeRatio)), ['Normal <8','Indeterminate 8–14','—','Elevated >14']),
+    rrow('LAVi', lavi, laviGIdx(parseFloat(lavi)), ['Normal <34','Borderline 34–38','Dilated 39–48','Severely Dilated >48']),
+    rrow('PV flow pattern', TS.pvFlow, -1, null),
+    rrow('Diastolic grade', diastGrade, diastGrade.indexOf('Normal')>=0?0:diastGrade.indexOf('indeterminate')>=0?1:diastGrade.indexOf('elevated')>=0?3:2, ['Normal','Indeterminate','Normal filling pressures','Elevated filling pressures']),
+    rdom('HAEMODYNAMICS AND CARDIAC OUTPUT'),
+    rrow('LVOT diameter', d.LVOTd?d.LVOTd+' mm':'', parseFloat(d.LVOTd)>=18&&parseFloat(d.LVOTd)<=22?0:1, ['Normal 18–22 mm','Outside range','—','—']),
+    rrow('LVOT VTI', d.LVOTVTI?d.LVOTVTI+' cm':'', parseFloat(d.LVOTVTI)>=18&&parseFloat(d.LVOTVTI)<=22?0:parseFloat(d.LVOTVTI)>=15?1:3, ['Normal 18–22 cm','Borderline','—','Reduced <15 cm']),
+    rrow('LVOT Vmax', d.LVOTVmax?d.LVOTVmax+' cm/s':'', parseFloat(d.LVOTVmax)<100?0:parseFloat(d.LVOTVmax)<150?1:3, ['Normal <100 cm/s','Borderline','—','Elevated >150']),
+    rrow('Stroke Volume', sv, svGIdx(parseFloat(sv)), ['Normal 60–100 ml','Borderline','—','Reduced <50 ml']),
+    rrow('Cardiac Output', co, coGIdx(parseFloat(co)), ['Normal 4–8 L/min','Borderline','—','Low <3.5 L/min']),
+    rrow('Cardiac Index', ci, ciGIdx(parseFloat(ci)), ['Normal 2.2–4.0','Borderline 1.8–2.2','—','Low <1.8 L/min/m²']),
+    rrow('SVRI', svri, parseFloat(svri)>=1760&&parseFloat(svri)<=2600?0:parseFloat(svri)<1760?1:2, ['Normal 1760–2600','Low <1760','Elevated >2600','—']),
+    rdom('RIGHT VENTRICLE'),
+    rrow('RV basal diameter', d.RVbase?d.RVbase+' mm':'', rvbaseGIdx(num('RVbase')), [sex?'Normal 25–41 mm':'Normal 24–38 mm', sex?'Mild 42–46':'Mild 39–44', sex?'Mod 47–50':'Mod 45–48', sex?'Sev ≥51':'Sev ≥49']),
+    rrow('RV mid diameter', d.RVmid?d.RVmid+' mm':'', parseFloat(d.RVmid)<=(sex?35:32)?0:3, [sex?'Normal ≤35 mm':'Normal ≤32 mm','—','—','Dilated if above']),
+    rrow('RV length', d.RVlength?d.RVlength+' mm':'', parseFloat(d.RVlength)<=(sex?83:79)?0:3, [sex?'Normal ≤83 mm':'Normal ≤79 mm','—','—','Dilated if above']),
+    rrow('TAPSE', d.TAPSE?d.TAPSE+' mm':'', tapseGIdx(num('TAPSE')), ['Normal ≥17 mm','Borderline 14–16','—','Impaired <14 mm']),
+    rrow('RV S\' (TDI)', d.RVs?d.RVs+' cm/s':'', num('RVs')>=10?0:3, ['Normal ≥10 cm/s','—','—','Impaired <10 cm/s']),
+    rrow('RV FAC', rvfac, facGIdx(parseFloat(rvfac)), ['Normal ≥35%','Mild 25–34%','Moderate 15–24%','Severe <15%']),
+    rrow('RV/LV ratio', rvlv, parseFloat(rvlv)<1?0:3, ['Normal <1.0','—','—','Dilated RV ≥1.0']),
+    rrow('RV wall thickness', d.RVwall?d.RVwall+' mm':'', num('RVwall')<=5?0:2, ['Normal ≤5 mm','—','Hypertrophy >5 mm','—']),
+    rrow('MAPSE', d.MAPSE?d.MAPSE+' mm':'', num('MAPSE')>=8?0:3, ['Normal ≥8 mm','—','—','Reduced <8 mm']),
+    rrow('Septal D-sign', TS.dSign, TS.dSign==='Normal'?0:3, ['Normal','—','—','Abnormal']),
+    rrow('PA acc time (PAT)', d.PAT?d.PAT+' ms':'', patGIdx(num('PAT')), ['Normal ≥100 ms','Borderline 70–99','—','Elevated PVR <70 ms']),
+    rrow('Estimated PASP', pasp, paspGIdx(parseFloat(pasp)), ['Normal ≤35 mmHg','Mild PH 36–50','Moderate PH 51–70','Severe PH >70']),
+    rdom('VALVULAR ASSESSMENT (BSE 2024)'),
+    rrow('Aortic valve morphology', TS.avMorph||'Trileaflet', -1, null),
+    rrow('Aortic Stenosis severity', SEV_LABELS[SEV.AS], SEV.AS===0?0:SEV.AS===1?0:SEV.AS===2?1:SEV.AS===3?2:3, ['None / Trace','Mild','Moderate','Severe']),
+    rrow('AV Vmax', d.AVVmax?d.AVVmax+' m/s':'', avvmaxGIdx(num('AVVmax')), ['Normal <2.5 m/s','Mild 2.5–3.9','Mod 4.0–4.9','Severe ≥5.0']),
+    rrow('AV Mean PG', d.AVMeanPG?d.AVMeanPG+' mmHg':'', avmpgGIdx(num('AVMeanPG')), ['Normal <20 mmHg','Mild 20–39','Mod 40–59','Severe ≥60']),
+    rrow('AVA (continuity eq.)', ava, avaGIdx(parseFloat(ava)), ['Normal >1.5 cm²','Mild 1.0–1.5','Severe <1.0','Very Severe ≤0.6']),
+    rrow('AVAi / Doppler Index', avaI, -1, null),
+    rrow('Aortic Regurgitation', SEV_LABELS[SEV.AR], SEV.AR<=1?0:SEV.AR===2?1:SEV.AR===3?2:3, ['None / Trace','Mild','Moderate','Severe']),
+    rrow('AR VC width', d.ARVC?d.ARVC+' cm':'', num('ARVC')<0.3?0:num('ARVC')<=0.6?2:3, ['Mild <0.3 cm','—','Moderate 0.3–0.6','Severe >0.6']),
+    rrow('AR PHT', d.ARPHT?d.ARPHT+' ms':'', num('ARPHT')>500?0:num('ARPHT')>=200?2:3, ['Mild >500 ms','—','Moderate 200–500','Severe <200']),
+    rrow('Mitral Regurgitation', SEV_LABELS[SEV.MR], SEV.MR<=1?0:SEV.MR===2?1:SEV.MR===3?2:3, ['None / Trace','Mild','Moderate','Severe']),
+    rrow('MR mechanism', TS.mrMech||'Not specified', -1, null),
+    rrow('MR VC width', d.MRVC?d.MRVC+' cm':'', num('MRVC')<0.3?0:num('MRVC')<0.7?2:3, ['Mild <0.3 cm','—','Moderate 0.3–0.69','Severe ≥0.7']),
+    rrow('MR EROA (PISA)', eroa, mreIdx(parseFloat(eroa)), ['Mild <0.2 cm²','Moderate 0.2–0.39','—','Severe ≥0.4 cm²']),
+    rrow('Mitral Stenosis', SEV_LABELS[SEV.MS], SEV.MS<=1?0:SEV.MS===2?1:SEV.MS===3?2:3, ['None / Trace','Mild','Moderate','Severe']),
+    rrow('MVA (PHT method)', mvaVal, parseFloat(mvaVal)>1.5?0:parseFloat(mvaVal)>=1?2:3, ['Normal >1.5 cm²','—','Moderate 1.0–1.5','Severe <1.0 cm²']),
+    rrow('Tricuspid Regurgitation', SEV_LABELS[SEV.TR], SEV.TR<=1?0:SEV.TR===2?1:SEV.TR===3?2:3, ['None / Trace','Mild','Moderate','Severe']),
+    rrow('TR VC width', d.TRVC?d.TRVC+' cm':'', num('TRVC')<0.3?0:num('TRVC')<0.7?2:3, ['Mild <0.3 cm','—','Moderate 0.3–0.69','Severe ≥0.7']),
+    rrow('Pulmonary Regurgitation', SEV_LABELS[SEV.PR], SEV.PR<=1?0:SEV.PR===2?1:SEV.PR===3?2:3, ['None / Trace','Mild','Moderate','Severe']),
+    rdom('AORTIC ROOT'),
+    rrow('Sinus of Valsalva', d.SoV?d.SoV+' mm':'', num('SoV')<=40?0:2, ['Normal ≤40 mm','—','Dilated >40 mm','—']),
+    rrow('Sino-tubular junction', d.STJ?d.STJ+' mm':'', num('STJ')<=36?0:2, ['Normal ≤36 mm','—','Dilated >36 mm','—']),
+    rrow('Ascending aorta', d.AscAo?d.AscAo+' mm':'', num('AscAo')<=40?0:2, ['Normal ≤40 mm','—','Dilated >40 mm','—']),
+    rdom('IVC, PRELOAD AND PERICARDIUM'),
+    rrow('IVC max diameter', d.IVCmax?d.IVCmax+' mm':'', ivcGIdx(num('IVCmax')), ['Normal <21 mm','Borderline 21–25','—','Plethoric >25 mm']),
+    rrow('IVC collapsibility index', ivcCI, -1, null),
+    rrow('Estimated RAP', rap, rap.indexOf('3')===0?0:rap.indexOf('15')===0?3:1, ['Low 3 mmHg','Intermediate 8 mmHg','—','Elevated 15 mmHg']),
+    rrow('Fluid responsiveness', fluid, -1, null),
+    rrow('PLR delta VTI', plrVal!=='—'?plrVal:'', parseFloat(plrVal)>=10?0:3, ['Responsive ≥10%','—','—','Not responsive <10%']),
+    rrow('Pericardial effusion', TS.pericEff, TS.pericEff==='None'||TS.pericEff==='Trivial'?0:TS.pericEff.indexOf('Small')>=0?1:TS.pericEff.indexOf('Moderate')>=0?2:3, ['None / Trivial','Small <10 mm','Moderate 10–20','Large >20 mm']),
+    (function(){var tf=Object.keys(MT).filter(function(k){return MT[k];}).map(function(k){return k.replace('tamp_','').replace(/_/g,' ');}).join(', ');return tf?rrow('Tamponade features',tf,3,['—','—','—','Present']):'';})(),
+    rrow('Pleural effusions', TS.pleuralL+', '+TS.pleuralR, -1, null),
+    d.additionalFindings?rrow('Additional findings',d.additionalFindings,-1,null):'',
+  ].filter(Boolean).join('');
+
+  document.getElementById('rptTableWrap').innerHTML=
+    '<div class="sch" style="cursor:default;border-bottom:1px solid var(--br)"><div class="sct" style="font-size:12px">Measured Parameters and Reference Ranges</div></div>'+
+    '<table class="rtab"><thead><tr><th style="width:36%">Parameter</th><th style="width:20%">Value</th><th>Reference Range — Grade</th></tr></thead><tbody>'+tableRows+'</tbody></table>';
+
+  // NARRATIVE — clean, no symbols
+  var ni=[];
+  function tag(txt,flag){ni.push({txt:txt,flag:!!flag});}
+
+  if(ef){
+    if(ef>=55) tag('LV systolic function is <span class="ng">normal</span> (LVEF <span class="nv">'+ef.toFixed(0)+'%</span>).',false);
+    else if(ef>=50) tag('LV systolic function is <span class="nam">borderline low</span> (LVEF <span class="nv">'+ef.toFixed(0)+'%</span>). Repeat assessment in 3–6 months is recommended.',true);
+    else if(ef>=35) tag('LV systolic function is <span class="nb">impaired</span> (LVEF <span class="nv">'+ef.toFixed(0)+'%</span>). Further assessment and optimisation are warranted.',true);
+    else tag('LV systolic function is <span class="nb">severely impaired</span> (LVEF <span class="nv">'+ef.toFixed(0)+'%</span>). Urgent clinical review is required.',true);
+  } else if(facval&&facval!=='—'){tag('LV systolic function assessed by fractional area change: <span class="nv">'+facval+'</span>.',false);}
+  if(TS.wallMotion!=='Normal') tag('<span class="nb">Wall motion abnormality identified</span>: '+TS.wallMotion+(d.rwmaText?' ('+d.rwmaText+')':'')+'.',true);
+  if(geom&&geom!=='Normal geometry'&&geom!=='—') tag('LV geometry is <span class="nv">'+geom+'</span> (relative wall thickness <span class="nv">'+rwt+'</span>).',false);
+  if(diastGrade&&diastGrade!=='—'&&diastGrade.indexOf('Insufficient')<0){tag('Diastolic function assessment (BSE 2024 algorithm): <span class="nv">'+diastGrade+'</span>. E/e\' ratio <span class="nv">'+eeRatio+'</span>. LAVi <span class="nv">'+lavi+'</span>.',diastGrade.toLowerCase().indexOf('elevated')>=0);}
+  var tapse2=num('TAPSE');
+  if(tapse2){
+    if(tapse2>=17) tag('RV systolic function is <span class="ng">preserved</span> (TAPSE <span class="nv">'+tapse2.toFixed(0)+' mm</span>).',false);
+    else if(tapse2>=14) tag('RV systolic function is <span class="nam">borderline</span> (TAPSE <span class="nv">'+tapse2.toFixed(0)+' mm</span>).',true);
+    else tag('<span class="nb">RV systolic dysfunction</span> is present (TAPSE <span class="nv">'+tapse2.toFixed(0)+' mm</span>).',true);
+  }
+  if(parseFloat(rvlv)>=1) tag('<span class="nb">RV dilatation</span> is present with a RV/LV basal ratio of <span class="nv">'+rvlv+'</span>, consistent with RV pressure or volume overload.',true);
+  var paspN=parseFloat(pasp)||0;
+  if(paspN>35) tag('Estimated PASP is <span class="nv">'+paspN.toFixed(0)+' mmHg</span> — <span class="nb">'+paspInterp+'</span> (TR Vmax '+( d.TRVmax||'—')+' m/s, estimated RAP '+rap+').',true);
+  else if(paspN&&paspN<=35) tag('Pulmonary artery pressure is <span class="ng">normal</span> (estimated PASP <span class="nv">'+paspN.toFixed(0)+' mmHg</span>).',false);
+  var coN=parseFloat(co)||0,ciN=parseFloat(ci)||0;
+  if(coN){
+    if(ciN<1.8) tag('<span class="nb">Cardiac index is critically low</span> (<span class="nv">'+ciN.toFixed(2)+' L/min/m²</span>, CO <span class="nv">'+co+'</span>), consistent with the cardiogenic shock threshold.',true);
+    else if(ciN<2.2) tag('Cardiac index is <span class="nam">reduced</span> (<span class="nv">'+ciN.toFixed(2)+' L/min/m²</span>, CO <span class="nv">'+co+'</span>).',true);
+    else tag('Cardiac output is <span class="ng">adequate</span> (CO <span class="nv">'+co+'</span>, CI <span class="nv">'+ci+'</span>).',false);
+  }
+  var svriN=parseFloat(svri)||0;
+  if(svriN&&coN){
+    if(svriN<1760) tag('SVRI is <span class="nam">low</span> (<span class="nv">'+svriN.toFixed(0)+' dyn·s·cm⁻⁵·m²</span>), consistent with distributive physiology.',true);
+    else if(svriN>2600&&ciN<2.2) tag('SVRI is <span class="nam">elevated</span> (<span class="nv">'+svriN.toFixed(0)+' dyn·s·cm⁻⁵·m²</span>), suggesting compensatory vasoconstriction in the context of a reduced cardiac index.',true);
+  }
+  ['AS','AR','MR','MS','TR','PR'].forEach(function(valve){
+    var lvl=SEV[valve];
+    if(lvl>=2){
+      var sl=SEV_LABELS[lvl],detail='';
+      if(valve==='AS'&&ava!=='—') detail=' (AVA '+ava+', Vmax '+(d.AVVmax||'—')+' m/s, mean PG '+(d.AVMeanPG||'—')+' mmHg)';
+      if(valve==='MR'&&d.MRVC) detail=' (VC '+d.MRVC+' cm'+(eroa!=='—'?', EROA '+eroa:'')+')';
+      if(valve==='TR') detail=', estimated PASP '+pasp;
+      tag('<span class="'+(lvl>=4?'nb':'nv')+'">'+sl+' '+valve+'</span> has been identified'+detail+(TS.mrMech&&valve==='MR'?' ('+TS.mrMech+')':'')+'.',lvl>=4);
+    }
+  });
+  tag('Volume and preload assessment: <span class="nv">'+fluid+'</span>. IVC maximum diameter <span class="nv">'+(d.IVCmax||'—')+' mm</span>. Estimated RAP <span class="nv">'+rap+'</span>.',false);
+  if(plrVal&&plrVal!=='—') tag('Passive leg raise response: <span class="nv">'+plrVal+'</span>.',plrVal.indexOf('Not responsive')>=0);
+  if(TS.pericEff!=='None'&&TS.pericEff!=='Trivial'){
+    var tf2=Object.keys(MT).filter(function(k){return MT[k];}).map(function(k){return k.replace('tamp_','').replace(/_/g,' ');}).join(', ');
+    tag('<span class="'+(tf2?'nb':'nv')+'">'+TS.pericEff+' pericardial effusion</span> is present'+(tf2?'. Tamponade features identified: '+tf2+'. Urgent clinical review is indicated.':'.')+'.',!!tf2);
+  }
+  if(d.additionalFindings) tag('Additional findings: '+d.additionalFindings+'.',false);
+
+  document.getElementById('rptNarr').innerHTML=
+    '<div class="narrtitle">Clinical Summary</div>'+
+    ni.map(function(item){return'<div class="ni">'+item.txt+'</div>';}).join('')+
+    '<div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--br);font-size:11px;color:var(--tx3)">'+
+    'Report performed / supervised by: ___________________________&nbsp;&nbsp; Designation: ___________________________<br>'+
+    'Date: '+(d.studyDate||'—')+'&nbsp;&nbsp; Time: '+(d.studyTime||'—')+'<br>'+
+    'Reference ranges: BSE 2024. This report supplements and does not replace clinical assessment.'+
+    '</div>';
+
+  document.getElementById('rptCont').style.display='block';
+  document.getElementById('rptph').style.display='none';
+  markDone('report'); calcShock();
+}
+
+function copyReport() {
+  var txt=[(document.getElementById('rptHdr')||{}).innerText,(document.getElementById('rptTableWrap')||{}).innerText,'\nCLINICAL SUMMARY\n',(document.getElementById('rptNarr')||{}).innerText].filter(Boolean).join('\n\n');
+  navigator.clipboard.writeText(txt).then(function(){showToast('Copied to clipboard');});
+}
+function printReport() {
+  if(document.getElementById('rptCont').style.display==='none') generateReport();
+  setTimeout(function(){window.print();},300);
+}
+
+// PWA
+if('serviceWorker' in navigator){
+  var sw="const C='pocus-v4';self.addEventListener('install',function(e){e.waitUntil(caches.open(C));});self.addEventListener('fetch',function(e){e.respondWith(caches.match(e.request).then(function(r){return r||fetch(e.request);}));});";
+  navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(function(){});
+}
+</script>
+</body>
+</html>
